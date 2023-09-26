@@ -1,26 +1,103 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fypv2/components/login_squarebox.dart';
 import 'package:fypv2/components/login_textfield.dart';
-import 'package:fypv2/pages/bottomnav.dart';
-import 'package:fypv2/themes/themes.dart';
 import '../components/login_button.dart';
 
-class LoginScreen extends StatelessWidget {
-  LoginScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   // text editing controllers
-  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
+
   final passwordController = TextEditingController();
 
-  void signUserIn(BuildContext context) {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const LibraryMain()));
+  // sign in user
+  // if successful, navigate to home page
+  // else, show error message
+  void signUserIn() async {
+    // show loading circle
+    showDialog(
+      context: context,
+      builder: (context) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+
+    // try signing in user
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+      Navigator.pop(context);
+    } on FirebaseAuthMultiFactorException catch (e) {
+      print(e.message);
+      print(e.code);
+      rethrow;
+    } on FirebaseAuthException catch (e) {
+      Navigator.pop(context);
+      print('Firebase Authentication Exception: ${e.message}');
+      if (e.code == 'user-not-found' || e.code == 'invalid-email') {
+        wrongEmailMessage();
+      } else if (e.code == 'wrong-password') {
+        wrongPasswordMessage();
+      } else if (e.code == 'invalid-login-credentials') {
+        print('invalid-login-credentials');
+      }
+    } on PlatformException catch (e) {
+      Navigator.pop(context);
+      print('Platform Exception: ${e.message}');
+    } catch (e) {
+      Navigator.pop(context);
+      print('Exception: ${e.toString()}');
+    }
+  }
+
+  void wrongEmailMessage() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Wrong email'),
+            content: const Text('Please enter a valid email address'),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('OK'))
+            ],
+          );
+        });
+  }
+
+  void wrongPasswordMessage() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Wrong password'),
+            content: const Text('Please enter a valid password'),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('OK'))
+            ],
+          );
+        });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: MyAppsTheme.currentTheme.colorScheme.background,
+      backgroundColor: Colors.grey[800],
       body: SafeArea(
           child: SingleChildScrollView(
               child: ConstrainedBox(
@@ -48,7 +125,7 @@ class LoginScreen extends StatelessWidget {
 
                       // Username text field
                       LoginTextField(
-                          controller: usernameController,
+                          controller: emailController,
                           hintText: 'Username',
                           obscureText: false),
 
@@ -81,7 +158,9 @@ class LoginScreen extends StatelessWidget {
                       // Sign in button
                       const SizedBox(height: 20),
 
-                      LoginButton(onTap: () => signUserIn(context)),
+                      LoginButton(
+                        onTap: signUserIn,
+                      ),
 
                       const SizedBox(height: 25),
 

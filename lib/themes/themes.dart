@@ -9,8 +9,8 @@ class MyAppsTheme {
       brightness: Brightness.dark,
       scaffoldBackgroundColor: Colors.black38,
       colorScheme: ColorScheme.dark(
-        background: Colors.grey[900]!,
-        primary: Colors.grey[800]!,
+        background: Colors.grey[800]!,
+        primary: Colors.grey[700]!,
         secondary: Colors.grey,
       ));
 

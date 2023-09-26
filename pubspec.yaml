@@ -29,6 +29,8 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   feather_icons: ^1.2.0
+  firebase_auth: ^4.10.0
+  firebase_core: ^2.16.0
   flutter:
     sdk: flutter
 
