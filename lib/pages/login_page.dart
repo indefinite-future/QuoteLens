@@ -1,18 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:fypv2/components/login_squarebox.dart';
-import 'package:fypv2/components/login_textfield.dart';
-import '../components/login_button.dart';
+import 'package:QuoteLens/components/login_squarebox.dart';
+import 'package:QuoteLens/components/login_textfield.dart';
+import 'package:QuoteLens/components/login_button.dart';
+import 'package:QuoteLens/services/auth_services.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class LoginPage extends StatefulWidget {
+  final Function()? onTap;
+  const LoginPage({super.key, required this.onTap});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginPageState extends State<LoginPage> {
   // text editing controllers
   final emailController = TextEditingController();
 
@@ -39,56 +40,71 @@ class _LoginScreenState extends State<LoginScreen> {
         password: passwordController.text,
       );
       Navigator.pop(context);
-    } on FirebaseAuthMultiFactorException catch (e) {
-      print(e.message);
-      print(e.code);
-      rethrow;
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
-      print('Firebase Authentication Exception: ${e.message}');
-      if (e.code == 'user-not-found' || e.code == 'invalid-email') {
-        wrongEmailMessage();
-      } else if (e.code == 'wrong-password') {
-        wrongPasswordMessage();
-      } else if (e.code == 'invalid-login-credentials') {
-        print('invalid-login-credentials');
+      if (e.code == 'network-request-failed') {
+        netwrokProblem();
+      } else if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
+        wrongInputMessage();
       }
-    } on PlatformException catch (e) {
-      Navigator.pop(context);
-      print('Platform Exception: ${e.message}');
+      // for debugging purposes
+      //print('\n Firebase Authentication Exception: ${e.message} \n');
+      print('Firebase Authentication Exception Code: ${e.code}');
     } catch (e) {
       Navigator.pop(context);
       print('Exception: ${e.toString()}');
     }
   }
 
-  void wrongEmailMessage() {
+  void netwrokProblem() {
     showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
-            title: const Text('Wrong email'),
-            content: const Text('Please enter a valid email address'),
+          return AlertDialog.adaptive(
+            backgroundColor: const Color.fromRGBO(142, 142, 147, 1),
+            title: const Text('Network request failed'),
+            content: const Text(
+              'Please wait and try again.',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.white,
+              ),
+            ),
             actions: [
               TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: const Text('OK'))
+                  child: const Text('OK',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      )))
             ],
           );
         });
   }
 
-  void wrongPasswordMessage() {
+  void wrongInputMessage() {
     showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
-            title: const Text('Wrong password'),
-            content: const Text('Please enter a valid password'),
+          return AlertDialog.adaptive(
+            backgroundColor: const Color.fromRGBO(142, 142, 147, 1),
+            title: const Text('Wrong email or password'),
+            content: const Text(
+              'Please enter a valid email address or password',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.white,
+              ),
+            ),
             actions: [
               TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: const Text('OK'))
+                  child: const Text('OK',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      )))
             ],
           );
         });
@@ -106,7 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const SizedBox(height: 110),
+                      const SizedBox(height: 80),
 
                       // Lock icon
                       const Icon(Icons.lock_person_rounded, size: 150),
@@ -115,9 +131,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       // Welcome text
                       const Text(
-                        'Login',
+                        'Welcome back!',
                         style: TextStyle(
-                          fontSize: 30,
+                          fontSize: 26,
                         ),
                       ),
 
@@ -155,11 +171,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             ],
                           )),
 
-                      // Sign in button
                       const SizedBox(height: 20),
 
+                      // Sign in button
                       LoginButton(
                         onTap: signUserIn,
+                        text: 'Sign In',
                       ),
 
                       const SizedBox(height: 25),
@@ -184,35 +201,44 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 25),
 
                       // Google and Apple buttons
-                      const Row(
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           // Google button
-                          SquareTile(imagepath: 'lib/images/google.png'),
+                          SquareTile(
+                              onTap: () => AuthService().signInWithGoogle(),
+                              imagepath: 'lib/images/google.png'),
 
-                          SizedBox(width: 25),
+                          const SizedBox(width: 25),
 
                           // Apple button
-                          SquareTile(imagepath: 'lib/images/apple.png'),
+                          SquareTile(
+                              onTap: () => {},
+                              imagepath: 'lib/images/apple.png'),
                         ],
                       ),
 
                       const SizedBox(height: 30),
 
                       // Register text
-                      const Row(
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Not a member?',
+                          const Text('Not a member?',
                               style:
                                   TextStyle(fontSize: 14, color: Colors.white)),
-                          SizedBox(width: 5),
-                          Text('Register Now.',
+                          const SizedBox(width: 5),
+                          GestureDetector(
+                            onTap: widget.onTap,
+                            child: const Text(
+                              'Register Now',
                               style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.cyan,
                                 fontWeight: FontWeight.bold,
-                              )),
+                              ),
+                            ),
+                          ),
                         ],
                       )
                     ],

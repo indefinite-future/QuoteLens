@@ -1,5 +1,19 @@
 // themes.dart
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class ThemeService {
+  static Future<Theme> getTheme(Theme darkTheme, Theme lightTheme) async {
+    final prefs = await SharedPreferences.getInstance();
+    final isDarkMode = prefs.getBool('isDarkMode') ?? false;
+    return isDarkMode ? darkTheme : lightTheme;
+  }
+
+  static Future<void> setTheme(bool isDarkMode) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isDarkMode', isDarkMode);
+  }
+}
 
 class MyAppsTheme {
   static ThemeData darkTheme = ThemeData(
@@ -26,5 +40,9 @@ class MyAppsTheme {
         secondary: Colors.grey[200]!,
       ));
 
-  static ThemeData currentTheme = darkTheme;
+  static ThemeData currentTheme = lightTheme;
+
+  static Future<Theme> getCurrentTheme() async {
+    return await ThemeService.getTheme(darkTheme as Theme, lightTheme as Theme);
+  }
 }

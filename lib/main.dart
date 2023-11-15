@@ -1,6 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fypv2/pages/auth_screen.dart';
-import 'package:fypv2/themes/themes.dart';
+import 'package:QuoteLens/pages/auth_page.dart';
+import 'package:QuoteLens/themes/themes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
@@ -18,10 +19,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'FYP version 2',
+      title: 'QuoteLens',
       debugShowCheckedModeBanner: false,
       home: const AuthPage(),
-      theme: MyAppsTheme.currentTheme,
+      darkTheme: ThemeData(
+        cupertinoOverrideTheme: const CupertinoThemeData(
+          textTheme: CupertinoTextThemeData(), // This is required
+        ),
+      ),
+      //theme: MyAppsTheme.currentTheme,
     );
   }
 }

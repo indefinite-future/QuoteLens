@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class QuoteScreen extends StatefulWidget {
-  const QuoteScreen({super.key});
+class QuotePage extends StatefulWidget {
+  const QuotePage({super.key});
 
   @override
-  State<QuoteScreen> createState() => _QuoteScreenState();
+  State<QuotePage> createState() => _QuotePageState();
 }
 
-class _QuoteScreenState extends State<QuoteScreen> {
+class _QuotePageState extends State<QuotePage> {
   @override
   Widget build(BuildContext context) {
     return const Placeholder(

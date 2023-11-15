@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:feather_icons/feather_icons.dart';
-import 'package:fypv2/themes/themes.dart';
-import 'library_screen.dart';
-import 'quote_screen.dart';
-import 'user_screen.dart';
+import 'package:QuoteLens/themes/themes.dart';
+import 'library_page.dart';
+import 'quote_page.dart';
+import 'user_page.dart';
 
-class LibraryMain extends StatefulWidget {
-  const LibraryMain({super.key});
+class BottomNav extends StatefulWidget {
+  const BottomNav({super.key});
 
   @override
-  State<LibraryMain> createState() => _LibraryMainState();
+  State<BottomNav> createState() => _BottomNavState();
 }
 
-class _LibraryMainState extends State<LibraryMain> {
+class _BottomNavState extends State<BottomNav> {
   int _currentIndex = 0;
 
   final List<Widget> _tabScreens = [
-    const HomeScreen(),
-    const QuoteScreen(),
-    UserScreen(),
+    HomePage(),
+    const QuotePage(),
+    UserPage(),
   ];
 
   @override

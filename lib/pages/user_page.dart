@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
-class UserScreen extends StatefulWidget {
-  UserScreen({super.key});
+class UserPage extends StatefulWidget {
+  UserPage({super.key});
 
   final user = FirebaseAuth.instance.currentUser!;
 
@@ -15,10 +16,10 @@ class UserScreen extends StatefulWidget {
   }
 
   @override
-  State<UserScreen> createState() => _UserScreenState();
+  State<UserPage> createState() => _UserPageState();
 }
 
-class _UserScreenState extends State<UserScreen> {
+class _UserPageState extends State<UserPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

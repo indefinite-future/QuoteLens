@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fypv2/pages/bottomnav.dart';
-import 'package:fypv2/pages/login_screen.dart';
+import 'package:QuoteLens/pages/bottomnav.dart';
+import 'package:QuoteLens/pages/login_or_register_page.dart';
 
 class AuthPage extends StatelessWidget {
   const AuthPage({super.key});
@@ -16,11 +16,11 @@ class AuthPage extends StatelessWidget {
           builder: (context, snapshot) {
             //if the user is login
             if (snapshot.hasData) {
-              return const LibraryMain();
+              return const BottomNav();
             }
             //if the user is not login
             else {
-              return const LoginScreen();
+              return const LoginOrRegisterPage();
             }
           }),
     );
