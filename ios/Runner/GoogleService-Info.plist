@@ -3,21 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>276813621730-krr0ui51sb79han272tkl4hh7cf36akn.apps.googleusercontent.com</string>
+	<string>338087830843-9ia6c77lamqnrs196v2lhgh7lcld86ul.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.276813621730-krr0ui51sb79han272tkl4hh7cf36akn</string>
+	<string>com.googleusercontent.apps.338087830843-9ia6c77lamqnrs196v2lhgh7lcld86ul</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>338087830843-tjmtba89c6f11208ftqsae39qi9cbgcq.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDLJfDbPdte9VchkurWz4NHGdCu1Ghz0cc</string>
+	<string>AIzaSyDjEgD_l1Z9BZARKMiK9re1ZO_4C3FYZGs</string>
 	<key>GCM_SENDER_ID</key>
-	<string>276813621730</string>
+	<string>338087830843</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.example.fypv2</string>
 	<key>PROJECT_ID</key>
-	<string>fyp-project-ec958</string>
+	<string>quotelens</string>
 	<key>STORAGE_BUCKET</key>
-	<string>fyp-project-ec958.appspot.com</string>
+	<string>quotelens.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:276813621730:ios:f27cfbb4477e9328dfb1bb</string>
+	<string>1:338087830843:ios:b76caf94b956d07437031e</string>
 </dict>
 </plist>

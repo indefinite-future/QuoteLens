@@ -1,26 +1,87 @@
 {
   "project_info": {
-    "project_number": "276813621730",
-    "project_id": "fyp-project-ec958",
-    "storage_bucket": "fyp-project-ec958.appspot.com"
+    "project_number": "338087830843",
+    "project_id": "quotelens",
+    "storage_bucket": "quotelens.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:276813621730:android:d9f8342bee4ab770dfb1bb",
+        "mobilesdk_app_id": "1:338087830843:android:a256bac1d8cc0d9437031e",
         "android_client_info": {
           "package_name": "com.example.fypv2"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "338087830843-lj2slb0d39c1ik1o07ui1cvuotcbregl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyAf78K3-5M5f5tD6obz3pMvjSNJkBFRTNU"
+          "current_key": "AIzaSyBJRTVpmE2JRIu-85bROrkpvlKw2eo6SRw"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "338087830843-lj2slb0d39c1ik1o07ui1cvuotcbregl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "338087830843-dco2fevkau9b52k6jide6u0rfu1m81ej.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.quotelens"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:338087830843:android:edd949a59d529fb037031e",
+        "android_client_info": {
+          "package_name": "com.example.quotelens"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "338087830843-tjmtba89c6f11208ftqsae39qi9cbgcq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.quotelens",
+            "certificate_hash": "52cbaac05a26b33de68267180a0a8a52b5dfaa56"
+          }
+        },
+        {
+          "client_id": "338087830843-lj2slb0d39c1ik1o07ui1cvuotcbregl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJRTVpmE2JRIu-85bROrkpvlKw2eo6SRw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "338087830843-lj2slb0d39c1ik1o07ui1cvuotcbregl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "338087830843-dco2fevkau9b52k6jide6u0rfu1m81ej.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.quotelens"
+              }
+            }
+          ]
         }
       }
     }

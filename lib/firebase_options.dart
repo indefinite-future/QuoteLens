@@ -44,38 +44,42 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBupYLfrKR0yJZCtyGi8fd1V9drZot5Al8',
-    appId: '1:276813621730:web:59ff1da5307144a3dfb1bb',
-    messagingSenderId: '276813621730',
-    projectId: 'fyp-project-ec958',
-    authDomain: 'fyp-project-ec958.firebaseapp.com',
-    storageBucket: 'fyp-project-ec958.appspot.com',
-    measurementId: 'G-KG7STYDP2S',
+    apiKey: 'AIzaSyDaT4QekFjStQceCqiNgRqu7tp0GHed_8Q',
+    appId: '1:338087830843:web:f4e5a111b4cdfacf37031e',
+    messagingSenderId: '338087830843',
+    projectId: 'quotelens',
+    authDomain: 'quotelens.firebaseapp.com',
+    storageBucket: 'quotelens.appspot.com',
+    measurementId: 'G-7MWE5LJP4W',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAf78K3-5M5f5tD6obz3pMvjSNJkBFRTNU',
-    appId: '1:276813621730:android:d9f8342bee4ab770dfb1bb',
-    messagingSenderId: '276813621730',
-    projectId: 'fyp-project-ec958',
-    storageBucket: 'fyp-project-ec958.appspot.com',
+    apiKey: 'AIzaSyBJRTVpmE2JRIu-85bROrkpvlKw2eo6SRw',
+    appId: '1:338087830843:android:a256bac1d8cc0d9437031e',
+    messagingSenderId: '338087830843',
+    projectId: 'quotelens',
+    storageBucket: 'quotelens.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDLJfDbPdte9VchkurWz4NHGdCu1Ghz0cc',
-    appId: '1:276813621730:ios:f27cfbb4477e9328dfb1bb',
-    messagingSenderId: '276813621730',
-    projectId: 'fyp-project-ec958',
-    storageBucket: 'fyp-project-ec958.appspot.com',
+    apiKey: 'AIzaSyDjEgD_l1Z9BZARKMiK9re1ZO_4C3FYZGs',
+    appId: '1:338087830843:ios:b76caf94b956d07437031e',
+    messagingSenderId: '338087830843',
+    projectId: 'quotelens',
+    storageBucket: 'quotelens.appspot.com',
+    androidClientId: '338087830843-tjmtba89c6f11208ftqsae39qi9cbgcq.apps.googleusercontent.com',
+    iosClientId: '338087830843-9ia6c77lamqnrs196v2lhgh7lcld86ul.apps.googleusercontent.com',
     iosBundleId: 'com.example.fypv2',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDLJfDbPdte9VchkurWz4NHGdCu1Ghz0cc',
-    appId: '1:276813621730:ios:7317b22e787de180dfb1bb',
-    messagingSenderId: '276813621730',
-    projectId: 'fyp-project-ec958',
-    storageBucket: 'fyp-project-ec958.appspot.com',
+    apiKey: 'AIzaSyDjEgD_l1Z9BZARKMiK9re1ZO_4C3FYZGs',
+    appId: '1:338087830843:ios:b7ec6bd20ca1825537031e',
+    messagingSenderId: '338087830843',
+    projectId: 'quotelens',
+    storageBucket: 'quotelens.appspot.com',
+    androidClientId: '338087830843-tjmtba89c6f11208ftqsae39qi9cbgcq.apps.googleusercontent.com',
+    iosClientId: '338087830843-1g5npmnvmppp3b4v9hct9lcj62n64lhn.apps.googleusercontent.com',
     iosBundleId: 'com.example.fypv2.RunnerTests',
   );
 }

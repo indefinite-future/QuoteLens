@@ -57,7 +57,7 @@ class ReadingNow extends StatelessWidget {
                     height: 190,
                     decoration: const BoxDecoration(
                       image: DecorationImage(
-                        image: NetworkImage('https://via.placeholder.com/150'),
+                        image: NetworkImage('https://via.placeholder.com/100'),
                         fit: BoxFit.cover,
                       ),
                     ),

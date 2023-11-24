@@ -1,9 +1,11 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'login_page.dart';
 import 'register_page.dart';
 
 class LoginOrRegisterPage extends StatefulWidget {
-  const LoginOrRegisterPage({super.key});
+  const LoginOrRegisterPage({super.key, this.savedThemeMode});
+  final AdaptiveThemeMode? savedThemeMode;
 
   @override
   State<LoginOrRegisterPage> createState() => _LoginOrRegisterPageState();
