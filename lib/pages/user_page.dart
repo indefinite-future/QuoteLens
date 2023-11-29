@@ -1,6 +1,10 @@
+import 'package:QuoteLens/themes/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:provider/provider.dart';
+
+import '../themes/themes.dart';
 
 class UserPage extends StatefulWidget {
   UserPage({super.key});
@@ -38,6 +42,23 @@ class _UserPageState extends State<UserPage> {
               child: const Text('Logout'),
               onPressed: () {
                 widget.signUserOut();
+              },
+            ),
+
+            //toggle theme button
+            const Text("Toggle Theme:"),
+            ElevatedButton(
+              child: const Text('Light'),
+              onPressed: () {
+                Provider.of<ThemeProvider>(context, listen: false)
+                    .setTheme(lightTheme);
+              },
+            ),
+            ElevatedButton(
+              child: const Text('Dark'),
+              onPressed: () {
+                Provider.of<ThemeProvider>(context, listen: false)
+                    .setTheme(darkTheme);
               },
             ),
           ],

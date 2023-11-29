@@ -1,12 +1,10 @@
-import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:QuoteLens/pages/bottomnav.dart';
 import 'package:QuoteLens/pages/login_or_register_page.dart';
 
 class AuthPage extends StatelessWidget {
-  const AuthPage({super.key, this.savedThemeMode});
-  final AdaptiveThemeMode? savedThemeMode;
+  const AuthPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +20,7 @@ class AuthPage extends StatelessWidget {
             }
             //if the user is not login
             else {
-              return const LoginOrRegisterPage(
-                  savedThemeMode: AdaptiveThemeMode.dark);
+              return const LoginOrRegisterPage();
             }
           }),
     );

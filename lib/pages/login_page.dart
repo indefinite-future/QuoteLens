@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:QuoteLens/components/login_squarebox.dart';
 import 'package:QuoteLens/components/login_textfield.dart';
 import 'package:QuoteLens/components/login_button.dart';
@@ -8,8 +7,7 @@ import 'package:QuoteLens/services/auth_services.dart';
 
 class LoginPage extends StatefulWidget {
   final Function()? onTap;
-  const LoginPage({super.key, required this.onTap, this.savedThemeMode});
-  final AdaptiveThemeMode? savedThemeMode;
+  const LoginPage({super.key, required this.onTap});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -115,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[800], //savedThemeMode.backgroundColor,
+      backgroundColor: Colors.grey[800],
       body: SafeArea(
           child: SingleChildScrollView(
               child: ConstrainedBox(

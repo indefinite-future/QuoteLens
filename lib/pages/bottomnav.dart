@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:feather_icons/feather_icons.dart';
-import 'package:QuoteLens/themes/themes.dart';
 import 'library_page.dart';
 import 'quote_page.dart';
 import 'user_page.dart';
@@ -34,7 +33,7 @@ class _BottomNavState extends State<BottomNav> {
                 height: 110, //min 89
                 child: BottomNavigationBar(
                   //bottomNavigationBar: BottomNavigationBar(
-                  backgroundColor: MyAppsTheme.currentTheme
+                  backgroundColor: Theme.of(context)
                       .scaffoldBackgroundColor, //const Color(0xFF212121),
                   unselectedItemColor: Colors.white,
                   selectedItemColor: Colors.cyan,
