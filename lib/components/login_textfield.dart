@@ -20,13 +20,16 @@ class LoginTextField extends StatelessWidget {
         controller: controller,
         obscureText: obscureText, //hide password
         decoration: InputDecoration(
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
+          enabledBorder: OutlineInputBorder(
+            borderSide:
+                BorderSide(color: Theme.of(context).colorScheme.tertiary),
           ),
           focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey),
+            borderSide:
+                //BorderSide(color: Theme.of(context).colorScheme.secondary),
+                BorderSide(color: Colors.cyan),
           ),
-          fillColor: Colors.grey.shade800,
+          fillColor: Theme.of(context).colorScheme.background,
           filled: true,
           border: const OutlineInputBorder(),
           hintText: hintText,

@@ -14,14 +14,14 @@ class LoginButton extends StatelessWidget {
           padding: const EdgeInsets.all(10.0),
           margin: const EdgeInsets.symmetric(horizontal: 50.0),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).primaryColor,
             borderRadius: BorderRadius.circular(8),
           ),
           child: Center(
             child: Text(text,
-                style: const TextStyle(
+                style: TextStyle(
                     fontSize: 20,
-                    color: Colors.black,
+                    color: Theme.of(context).colorScheme.background,
                     fontWeight: FontWeight.bold)),
           ),
         ));

@@ -32,7 +32,6 @@ class _BottomNavState extends State<BottomNav> {
             child: SizedBox(
                 height: 110, //min 89
                 child: BottomNavigationBar(
-                  //bottomNavigationBar: BottomNavigationBar(
                   backgroundColor: Theme.of(context)
                       .scaffoldBackgroundColor, //const Color(0xFF212121),
                   unselectedItemColor: Colors.white,

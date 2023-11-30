@@ -113,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[800],
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
           child: SingleChildScrollView(
               child: ConstrainedBox(
@@ -130,11 +130,11 @@ class _LoginPageState extends State<LoginPage> {
                       const SizedBox(height: 30),
 
                       // Welcome text
-                      const Text(
+                      Text(
                         'Welcome back!',
                         style: TextStyle(
                           fontSize: 26,
-                          color: Colors.white,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
 
@@ -142,9 +142,10 @@ class _LoginPageState extends State<LoginPage> {
 
                       // Username text field
                       LoginTextField(
-                          controller: emailController,
-                          hintText: 'Username',
-                          obscureText: false),
+                        controller: emailController,
+                        hintText: 'Username',
+                        obscureText: false,
+                      ),
 
                       const SizedBox(height: 20),
 
@@ -157,8 +158,8 @@ class _LoginPageState extends State<LoginPage> {
                       const SizedBox(height: 8),
 
                       // Forgot password text
-                      const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 50.0),
+                      Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 50.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
@@ -166,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                                 'Forgot password?',
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: Colors.white,
+                                  color: Theme.of(context).colorScheme.tertiary,
                                 ),
                               ),
                             ],
@@ -190,9 +191,12 @@ class _LoginPageState extends State<LoginPage> {
                               Expanded(
                                   child: Divider(
                                       thickness: 0.5, color: Colors.grey[400])),
-                              const Text("   Or continue with   ",
+                              Text("   Or continue with   ",
                                   style: TextStyle(
-                                      fontSize: 14, color: Colors.white)),
+                                    fontSize: 14,
+                                    color:
+                                        Theme.of(context).colorScheme.tertiary,
+                                  )),
                               Expanded(
                                   child: Divider(
                                       thickness: 0.5, color: Colors.grey[400])),
@@ -225,9 +229,10 @@ class _LoginPageState extends State<LoginPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text('Not a member?',
-                              style:
-                                  TextStyle(fontSize: 14, color: Colors.white)),
+                          Text('Not a member?',
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: Theme.of(context).primaryColor)),
                           const SizedBox(width: 5),
                           GestureDetector(
                             onTap: widget.onTap,
