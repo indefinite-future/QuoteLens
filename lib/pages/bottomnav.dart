@@ -34,32 +34,38 @@ class _BottomNavState extends State<BottomNav> {
                 child: BottomNavigationBar(
                   backgroundColor: Theme.of(context)
                       .scaffoldBackgroundColor, //const Color(0xFF212121),
-                  unselectedItemColor: Colors.white,
+                  unselectedItemColor: Theme.of(context).primaryColor,
                   selectedItemColor: Colors.cyan,
+                  showUnselectedLabels: true,
+                  unselectedLabelStyle:
+                      TextStyle(color: Theme.of(context).primaryColor),
+                  selectedLabelStyle: const TextStyle(color: Colors.cyan),
                   currentIndex: _currentIndex,
                   onTap: (index) {
                     setState(() {
                       _currentIndex = index;
                     });
                   },
-                  items: const [
+                  items: [
                     BottomNavigationBarItem(
-                      icon: Icon(FeatherIcons.book, color: Colors.white),
+                      icon: Icon(FeatherIcons.book,
+                          color: Theme.of(context).primaryColor),
                       activeIcon:
-                          Icon(FeatherIcons.bookOpen, color: Colors.cyan),
+                          const Icon(FeatherIcons.bookOpen, color: Colors.cyan),
                       label: 'Library',
                     ),
                     BottomNavigationBarItem(
-                      icon: Icon(FeatherIcons.bookmark, color: Colors.white),
-                      activeIcon:
-                          Icon(Icons.bookmark_rounded, color: Colors.cyan),
+                      icon: Icon(FeatherIcons.bookmark,
+                          color: Theme.of(context).primaryColor),
+                      activeIcon: const Icon(Icons.bookmark_rounded,
+                          color: Colors.cyan),
                       label: 'Quotes',
                     ),
                     BottomNavigationBarItem(
                       icon: Icon(Icons.person_outline_rounded,
-                          color: Colors.white),
+                          color: Theme.of(context).primaryColor),
                       activeIcon:
-                          Icon(Icons.person_rounded, color: Colors.cyan),
+                          const Icon(Icons.person_rounded, color: Colors.cyan),
                       label: 'Profile',
                     ),
                   ],

@@ -1,4 +1,5 @@
 // themes.dart
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 ThemeData darkTheme = ThemeData(
@@ -13,6 +14,11 @@ ThemeData darkTheme = ThemeData(
     secondary: Colors.grey,
     tertiary: Colors.white,
   ),
+  cupertinoOverrideTheme: const CupertinoThemeData(
+    textTheme: CupertinoTextThemeData(
+      textStyle: TextStyle(color: Colors.black),
+    ), // This is required
+  ),
 );
 
 ThemeData lightTheme = ThemeData(
@@ -20,11 +26,16 @@ ThemeData lightTheme = ThemeData(
   primarySwatch: Colors.grey,
   primaryColor: Colors.black,
   brightness: Brightness.light,
-  scaffoldBackgroundColor: Colors.white70,
+  scaffoldBackgroundColor: Colors.white,
   colorScheme: ColorScheme.light(
     background: Colors.white,
     primary: Colors.grey[100]!,
     secondary: Colors.grey[200]!,
     tertiary: Colors.grey,
+  ),
+  cupertinoOverrideTheme: const CupertinoThemeData(
+    textTheme: CupertinoTextThemeData(
+      textStyle: TextStyle(color: Colors.black),
+    ), // This is required
   ),
 );

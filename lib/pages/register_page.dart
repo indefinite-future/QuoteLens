@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:QuoteLens/components/login_squarebox.dart';
@@ -21,10 +22,20 @@ class _RegisterPageState extends State<RegisterPage> {
 
   final confirmPasswordController = TextEditingController();
 
+  Future addUserDetails(String email, String username) async {
+    await FirebaseFirestore.instance.collection('users').add({
+      'email': email,
+      'username': username,
+      'created_at': DateTime.now(),
+      'last_login': DateTime.now(),
+      'pofile_pic': '/images/default_profile_pic.png',
+    });
+  }
+
   // sign in user
   // if successful, navigate to home page
   // else, show error message
-  void signUserUp() async {
+  Future signUserUp() async {
     // show loading circle
     showDialog(
       context: context,
@@ -43,14 +54,17 @@ class _RegisterPageState extends State<RegisterPage> {
           email: emailController.text,
           password: passwordController.text,
         );
-      } else {
-        passwordNotMatch();
+
+        addUserDetails(
+          emailController.text,
+          emailController.text,
+        );
       }
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
-      if (e.code == 'network-request-failed') {
-        netwrokProblem();
+      if (e.code == 'weak-password') {
+        weakPassword();
       } else if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
         wrongInputMessage();
       }
@@ -74,7 +88,6 @@ class _RegisterPageState extends State<RegisterPage> {
               'Please match the password.',
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.white,
               ),
             ),
             actions: [
@@ -83,25 +96,24 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: const Text('OK',
                       style: TextStyle(
                         fontSize: 16,
-                        color: Colors.white,
+                        color: Colors.black,
                       )))
             ],
           );
         });
   }
 
-  void netwrokProblem() {
+  void weakPassword() {
     showDialog(
         context: context,
         builder: (context) {
           return AlertDialog.adaptive(
             backgroundColor: const Color.fromRGBO(142, 142, 147, 1),
-            title: const Text('Network request failed'),
+            title: const Text('Register Failed'),
             content: const Text(
-              'Please wait and try again.',
+              'Password should be at least 6 characters.',
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.white,
               ),
             ),
             actions: [
@@ -110,7 +122,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: const Text('OK',
                       style: TextStyle(
                         fontSize: 16,
-                        color: Colors.white,
+                        color: Colors.black,
                       )))
             ],
           );
@@ -128,7 +140,6 @@ class _RegisterPageState extends State<RegisterPage> {
               'Please enter a valid email address or password',
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.white,
               ),
             ),
             actions: [
@@ -137,7 +148,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: const Text('OK',
                       style: TextStyle(
                         fontSize: 16,
-                        color: Colors.white,
+                        color: Colors.black,
                       )))
             ],
           );
@@ -147,7 +158,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[800],
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
           child: SingleChildScrollView(
               child: ConstrainedBox(
@@ -198,24 +209,24 @@ class _RegisterPageState extends State<RegisterPage> {
                       const SizedBox(height: 8),
 
                       // Forgot password text
-                      const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 50.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(
-                                'Forgot password?',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
-                          )),
+                      // const Padding(
+                      //     padding: EdgeInsets.symmetric(horizontal: 50.0),
+                      //     child: Row(
+                      //       mainAxisAlignment: MainAxisAlignment.end,
+                      //       children: [
+                      //         Text(
+                      //           'Forgot password?',
+                      //           style: TextStyle(
+                      //             fontSize: 14,
+                      //             color: Colors.white,
+                      //           ),
+                      //         ),
+                      //       ],
+                      //     )),
 
-                      // Sign in button
                       const SizedBox(height: 20),
 
+                      // Sign up button
                       LoginButton(
                         onTap: signUserUp,
                         text: 'Sign Up',
@@ -231,9 +242,12 @@ class _RegisterPageState extends State<RegisterPage> {
                               Expanded(
                                   child: Divider(
                                       thickness: 0.5, color: Colors.grey[400])),
-                              const Text("   Or continue with   ",
+                              Text("   Or continue with   ",
                                   style: TextStyle(
-                                      fontSize: 14, color: Colors.white)),
+                                    fontSize: 14,
+                                    color:
+                                        Theme.of(context).colorScheme.tertiary,
+                                  )),
                               Expanded(
                                   child: Divider(
                                       thickness: 0.5, color: Colors.grey[400])),
@@ -266,10 +280,11 @@ class _RegisterPageState extends State<RegisterPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text('Already have an account?',
-                              style:
-                                  TextStyle(fontSize: 14, color: Colors.white)),
-                          SizedBox(width: 5),
+                          Text('Already have an account?',
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: Theme.of(context).primaryColor)),
+                          const SizedBox(width: 5),
                           GestureDetector(
                             onTap: widget.onTap,
                             child: const Text(

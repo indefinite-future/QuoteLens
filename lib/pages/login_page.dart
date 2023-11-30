@@ -67,7 +67,6 @@ class _LoginPageState extends State<LoginPage> {
               'Please wait and try again.',
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.white,
               ),
             ),
             actions: [
@@ -76,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: const Text('OK',
                       style: TextStyle(
                         fontSize: 16,
-                        color: Colors.white,
+                        color: Colors.black,
                       )))
             ],
           );
@@ -94,7 +93,6 @@ class _LoginPageState extends State<LoginPage> {
               'Please enter a valid email address or password',
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.white,
               ),
             ),
             actions: [
@@ -103,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: const Text('OK',
                       style: TextStyle(
                         fontSize: 16,
-                        color: Colors.white,
+                        color: Colors.black,
                       )))
             ],
           );
