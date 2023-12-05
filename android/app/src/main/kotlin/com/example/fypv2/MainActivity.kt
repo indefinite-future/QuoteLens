@@ -1,4 +1,4 @@
-package com.example.fypv2
+package com.example.quotelens
 
 import io.flutter.embedding.android.FlutterActivity
 

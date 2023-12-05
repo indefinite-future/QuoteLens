@@ -15,7 +15,7 @@ class _BottomNavState extends State<BottomNav> {
   int _currentIndex = 0;
 
   final List<Widget> _tabScreens = [
-    HomePage(),
+    LibraryPage(),
     const QuotePage(),
     UserPage(),
   ];

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:QuoteLens/components/login_squarebox.dart';
@@ -35,13 +36,23 @@ class _LoginPageState extends State<LoginPage> {
 
     // try signing in user
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
-      );
+      // get email and password from controllers
+      String email = emailController.text;
+      String password = passwordController.text;
+
+      // Sign in with email and password
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+
       Navigator.pop(context);
+
+      // Update last_login field
+      var users = FirebaseFirestore.instance.collection('users');
+      var doc = await users.where('email', isEqualTo: email).get();
+      if (doc.size > 0) {
+        await users.doc(doc.docs[0].id).update({'last_login': DateTime.now()});
+      }
     } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
       if (e.code == 'network-request-failed') {
         netwrokProblem();
       } else if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
@@ -51,8 +62,11 @@ class _LoginPageState extends State<LoginPage> {
       print('\n Firebase Authentication Exception: ${e.message} \n');
       print('Firebase Authentication Exception Code: ${e.code}');
     } catch (e) {
-      Navigator.pop(context);
       print('Exception: ${e.toString()}');
+    } finally {
+      if (mounted && Navigator.canPop(context)) {
+        Navigator.pop(context);
+      }
     }
   }
 

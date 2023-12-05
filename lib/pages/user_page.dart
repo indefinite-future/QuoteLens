@@ -27,41 +27,80 @@ class _UserPageState extends State<UserPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
-        child: Column(
-          children: [
-            Text(
-              "Logged in as: ${widget.user.email!}",
-              style: const TextStyle(
-                fontSize: 20,
+        child: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 30),
+
+                  //user profile picture
+                  FutureBuilder(
+                    future: FirebaseStorage.instance
+                        .ref()
+                        .child('images/${widget.user.uid}/profile_pic.png')
+                        .getDownloadURL(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return CircleAvatar(
+                          radius: 100,
+                          backgroundImage:
+                              NetworkImage(snapshot.data.toString()),
+                        );
+                      } else {
+                        return const CircleAvatar(
+                          radius: 100,
+                          backgroundImage:
+                              AssetImage('lib/images/default_profile_pic.png'),
+                        );
+                      }
+                    },
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  //user email
+                  Text(
+                    widget.user.email!,
+                    style: const TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  //logout button
+                  ElevatedButton(
+                    child: Text('Logout',
+                        style:
+                            TextStyle(color: Theme.of(context).primaryColor)),
+                    onPressed: () {
+                      widget.signUserOut();
+                    },
+                  ),
+
+                  const SizedBox(height: 30),
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                    child: SwitchListTile(
+                      title: const Text('Toggle Theme'),
+                      value: Provider.of<ThemeProvider>(context).isDarkModeOn,
+                      onChanged: (bool value) {
+                        Provider.of<ThemeProvider>(context, listen: false)
+                            .toggleTheme();
+                      },
+                      secondary: const Icon(Icons.lightbulb_outline),
+                    ),
+                  )
+                ],
               ),
             ),
-
-            //logout button
-            ElevatedButton(
-              child: const Text('Logout'),
-              onPressed: () {
-                widget.signUserOut();
-              },
-            ),
-
-            //toggle theme button
-            const Text("Toggle Theme:"),
-            ElevatedButton(
-              child: const Text('Light'),
-              onPressed: () {
-                Provider.of<ThemeProvider>(context, listen: false)
-                    .setTheme(lightTheme);
-              },
-            ),
-            ElevatedButton(
-              child: const Text('Dark'),
-              onPressed: () {
-                Provider.of<ThemeProvider>(context, listen: false)
-                    .setTheme(darkTheme);
-              },
-            ),
-          ],
+          ),
         ),
       ),
     );
