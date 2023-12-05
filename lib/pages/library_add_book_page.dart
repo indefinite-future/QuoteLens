@@ -23,6 +23,7 @@ class _AddBooksPageState extends State<AddBooksPage> {
       appBar: AppBar(
         title: const Text('Add New Books'),
       ),
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Form(
@@ -98,6 +99,7 @@ class _AddBooksPageState extends State<AddBooksPage> {
                           'author': _authorController.text,
                           'publisher': _publisherController.text,
                           'year': year,
+                          'last_click': Timestamp.now(),
                         });
 
                         await FirebaseFirestore.instance

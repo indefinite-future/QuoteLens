@@ -104,10 +104,4 @@ class _ReadingNowState extends State<ReadingNow> {
       ),
     );
   }
-
-  void updateLatestBook(DocumentSnapshot newLatestBook) {
-    setState(() {
-      latestBook = Future.value(newLatestBook);
-    });
-  }
 }

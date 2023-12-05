@@ -247,9 +247,11 @@ class _RegisterPageState extends State<RegisterPage> {
 
                   // Username text field
                   LoginTextField(
-                      controller: emailController,
-                      hintText: 'Username',
-                      obscureText: false),
+                    controller: emailController,
+                    hintText: 'Username',
+                    obscureText: false,
+                    prefixIcon: const Icon(Icons.email_rounded),
+                  ),
 
                   const SizedBox(height: 20),
 
@@ -257,15 +259,18 @@ class _RegisterPageState extends State<RegisterPage> {
                   LoginTextField(
                       controller: passwordController,
                       hintText: 'Password',
-                      obscureText: true),
+                      obscureText: true,
+                      prefixIcon: const Icon(Icons.lock_rounded)),
 
                   const SizedBox(height: 20),
 
                   // Password confirm text field
                   LoginTextField(
-                      controller: confirmPasswordController,
-                      hintText: 'Confirm Password',
-                      obscureText: true),
+                    controller: confirmPasswordController,
+                    hintText: 'Confirm Password',
+                    obscureText: true,
+                    prefixIcon: const Icon(Icons.lock_rounded),
+                  ),
 
                   const SizedBox(height: 20),
 

@@ -157,15 +157,20 @@ class _LoginPageState extends State<LoginPage> {
                         controller: emailController,
                         hintText: 'Username',
                         obscureText: false,
+                        prefixIcon: const Icon(
+                          Icons.email_rounded,
+                        ),
                       ),
 
                       const SizedBox(height: 20),
 
                       // Password text field
                       LoginTextField(
-                          controller: passwordController,
-                          hintText: 'Password',
-                          obscureText: true),
+                        controller: passwordController,
+                        hintText: 'Password',
+                        obscureText: true,
+                        prefixIcon: const Icon(Icons.lock_rounded),
+                      ),
 
                       const SizedBox(height: 8),
 
