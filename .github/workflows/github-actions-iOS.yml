@@ -1,6 +1,6 @@
-name: Flutter CI on MacOS
+name: Flutter CI iOS Test
 
-run-name: ${{ github.actor }} is testing out Flutter apps on MacOS.
+run-name: ${{ github.actor }} is testing out new git push on iOS.
 
 on:
   push:
@@ -15,6 +15,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+
+    - name: Fix flutter SDK folder permission
+      run: git config --global --add safe.directory /tmp/flutter/--
 
     - uses: subosito/flutter-action@v2
       with:
