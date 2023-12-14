@@ -21,6 +21,7 @@ jobs:
 
     - uses: subosito/flutter-action@v2.12.0
       with:
+        version: 3.18.0-2.0.pre.3
         channel: 'main' # or: 'beta', 'dev', 'master' (or 'main')
         architecture: x64
 
