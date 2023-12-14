@@ -2,7 +2,6 @@ import 'package:QuoteLens/pages/library_paragraghpage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:QuoteLens/components/library_readingnow.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:QuoteLens/pages/library_add_book_page.dart';
 
@@ -63,8 +62,9 @@ class _LibraryPageState extends State<LibraryPage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        const BookParagraphPage()),
+                                    builder: (context) => BookParagraphPage(
+                                          bookId: latestBook['bookId'],
+                                        )),
                               );
                               final user = FirebaseAuth.instance.currentUser;
                               await FirebaseFirestore.instance
@@ -80,9 +80,9 @@ class _LibraryPageState extends State<LibraryPage> {
                             },
                             child: Container(
                               width: 400,
-                              height: 200,
+                              height: 160,
                               margin: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 20),
+                                  horizontal: 20, vertical: 10),
                               padding: const EdgeInsets.all(20.0),
                               decoration: BoxDecoration(
                                 border: Border.all(color: Colors.transparent),
@@ -108,12 +108,16 @@ class _LibraryPageState extends State<LibraryPage> {
                                     latestBook['bookName'],
                                     style: const TextStyle(fontSize: 20),
                                     textAlign: TextAlign.left,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                   const SizedBox(height: 5),
                                   Text(
                                     latestBook['author'],
                                     style: const TextStyle(fontSize: 15),
                                     textAlign: TextAlign.left,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ],
                               ),
@@ -146,14 +150,28 @@ class _LibraryPageState extends State<LibraryPage> {
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: ListTile(
-                                  title: Text(book['bookName']),
-                                  subtitle: Text(book['author']),
+                                  title: Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 3.0, bottom: 3.0),
+                                    child: Text(
+                                      book['bookName'],
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  subtitle: Text(
+                                    book['author'],
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                   onTap: () async {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                              const BookParagraphPage()),
+                                        builder: (context) => BookParagraphPage(
+                                          bookId: book['bookId'],
+                                        ),
+                                      ),
                                     );
                                     final user =
                                         FirebaseAuth.instance.currentUser;

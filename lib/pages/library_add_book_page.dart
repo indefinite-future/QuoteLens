@@ -41,7 +41,8 @@ class _AddBooksPageState extends State<AddBooksPage> {
                   const SizedBox(height: 40),
                   TextFormField(
                     controller: _bookNameController,
-                    decoration: const InputDecoration(labelText: 'Book Name *'),
+                    decoration:
+                        const InputDecoration(labelText: 'Book Title *'),
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Please enter a book name';
@@ -70,52 +71,56 @@ class _AddBooksPageState extends State<AddBooksPage> {
                     // No validator needed as this field is not required
                   ),
                   const SizedBox(height: 50),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(
-                          color: Theme.of(context).primaryColor, width: 2),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
-                    ),
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        // If the form is valid, add the book to Firestore
-                        final user = FirebaseAuth.instance.currentUser;
-                        final bookRef = FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(user!.uid)
-                            .collection('books')
-                            .doc();
+                  Container(
+                    width: 200,
+                    height: 50,
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        side: BorderSide(
+                            color: Theme.of(context).primaryColor, width: 2),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                      ),
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          // If the form is valid, add the book to Firestore
+                          final user = FirebaseAuth.instance.currentUser;
+                          final bookRef = FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(user!.uid)
+                              .collection('books')
+                              .doc();
 
-                        int? year;
-                        if (_yearController.text.isNotEmpty &&
-                            !_yearController.text.contains(RegExp(r'\D'))) {
-                          year = int.parse(_yearController.text);
+                          int? year;
+                          if (_yearController.text.isNotEmpty &&
+                              !_yearController.text.contains(RegExp(r'\D'))) {
+                            year = int.parse(_yearController.text);
+                          }
+
+                          await bookRef.set({
+                            'bookId': bookRef.id,
+                            'bookName': _bookNameController.text,
+                            'author': _authorController.text,
+                            'publisher': _publisherController.text,
+                            'year': year,
+                            'last_click': Timestamp.now(),
+                          });
+
+                          await FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(user!.uid)
+                              .update(
+                            {'latestClickedBook': bookRef.id},
+                          );
+                          Navigator.pop(context);
                         }
-
-                        await bookRef.set({
-                          'bookId': bookRef.id,
-                          'bookName': _bookNameController.text,
-                          'author': _authorController.text,
-                          'publisher': _publisherController.text,
-                          'year': year,
-                          'last_click': Timestamp.now(),
-                        });
-
-                        await FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(user!.uid)
-                            .update(
-                          {'latestClickedBook': bookRef.id},
-                        );
-                        Navigator.pop(context);
-                      }
-                    },
-                    child: Text('Submit',
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontSize: 16,
-                        )),
+                      },
+                      child: Text('Submit',
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 18,
+                          )),
+                    ),
                   ),
                 ],
               ),

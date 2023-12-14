@@ -5,7 +5,6 @@ import 'package:QuoteLens/components/login_squarebox.dart';
 import 'package:QuoteLens/components/login_textfield.dart';
 import 'package:QuoteLens/components/login_button.dart';
 import 'package:QuoteLens/services/auth_services.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class RegisterPage extends StatefulWidget {
   final Function()? onTap;
