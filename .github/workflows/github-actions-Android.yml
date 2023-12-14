@@ -20,8 +20,10 @@ jobs:
           distribution: 'zulu'
           java-version: '11'
 
-      - name: Fix flutter SDK folder permission
-        run: git config --global --add safe.directory /tmp/flutter/--
+      # - name: Fix flutter SDK folder permission
+      #   run: git config --global --add safe.directory /tmp/flutter/--
+
+      - run: git config --global --add safe.directory '*'
 
       - uses: subosito/flutter-action@v2.12.0
         with:
