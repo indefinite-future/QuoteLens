@@ -23,11 +23,11 @@ jobs:
       # - name: Fix flutter SDK folder permission
       #   run: git config --global --add safe.directory /tmp/flutter/--
 
-      - run: git config --global --add safe.directory '*'
+      - run: git config --global --add safe.directory /Users/runner/work/flutter-action/flutter-action
 
       - uses: subosito/flutter-action@v2.12.0
         with:
-          flutter-version: '3.18.0-2.0.pre.3'
+          flutter-version: 'any'
 
       - run: flutter pub get
 
