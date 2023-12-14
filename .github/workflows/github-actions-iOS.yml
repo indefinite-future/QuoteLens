@@ -19,7 +19,7 @@ jobs:
     - name: Fix flutter SDK folder permission
       run: git config --global --add safe.directory /tmp/flutter/--
 
-    - uses: subosito/flutter-action@latest
+    - uses: subosito/flutter-action@v2.12.0
       with:
         channel: 'main' # or: 'beta', 'dev', 'master' (or 'main')
         architecture: x64
