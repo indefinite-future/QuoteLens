@@ -18,7 +18,7 @@ jobs:
           java-version: "11"
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.16.0"
+          # flutter-version: "3.16.0"
           architecture: x64
           channel: beta
       - run: flutter pub get
@@ -32,11 +32,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
+        id: flutter-action
         with:
-          flutter-version: "3.16.0"
+          # flutter-version: "3.16.0"
           channel: "beta"
           architecture: x64
-      - run: flutter --version
+      - run: |
+          git config --global --add safe.directory /opt/hostedtoolcache/flutter/${{ steps.flutter-action.outputs.CHANNEL }}-${{ steps.flutter-action.outputs.VERSION }}-${{ steps.flutter-action.outputs.ARCHITECTURE }}
+          flutter --version
       - run: flutter pub get
       #- run: flutter test
       - run: flutter build ios --release --no-codesign
