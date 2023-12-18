@@ -73,7 +73,7 @@ class _LibraryPageState extends State<LibraryPage> {
                                   .update({'latestClickedBook': latestBook.id});
                               await FirebaseFirestore.instance
                                   .collection('users')
-                                  .doc(user!.uid)
+                                  .doc(user.uid)
                                   .collection('books')
                                   .doc(latestBook.id)
                                   .update({'last_click': Timestamp.now()});
@@ -183,7 +183,7 @@ class _LibraryPageState extends State<LibraryPage> {
                                     });
                                     await FirebaseFirestore.instance
                                         .collection('users')
-                                        .doc(user!.uid)
+                                        .doc(user.uid)
                                         .collection('books')
                                         .doc(book['bookId'])
                                         .update(

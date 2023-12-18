@@ -41,6 +41,7 @@ class _LoginPageState extends State<LoginPage> {
       String password = passwordController.text;
 
       // Sign in with email and password
+      // ignore: unused_local_variable
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
 

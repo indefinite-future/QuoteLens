@@ -92,6 +92,7 @@ class _RegisterPageState extends State<RegisterPage> {
         password: password,
       );
 
+      // ignore: unused_local_variable
       String uid = userCredential.user!.uid;
       String username = email; // or get username from user input if necessary
       await addUserDetails(email, username);

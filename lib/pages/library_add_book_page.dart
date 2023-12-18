@@ -108,7 +108,7 @@ class _AddBooksPageState extends State<AddBooksPage> {
 
                           await FirebaseFirestore.instance
                               .collection('users')
-                              .doc(user!.uid)
+                              .doc(user.uid)
                               .update(
                             {'latestClickedBook': bookRef.id},
                           );
