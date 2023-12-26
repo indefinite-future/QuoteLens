@@ -62,9 +62,10 @@ class _LibraryPageState extends State<LibraryPage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => BookParagraphPage(
-                                          bookId: latestBook['bookId'],
-                                        )),
+                                  builder: (context) => BookParagraphPage(
+                                    bookName: latestBook['bookName'],
+                                  ),
+                                ),
                               );
                               final user = FirebaseAuth.instance.currentUser;
                               await FirebaseFirestore.instance
@@ -169,7 +170,7 @@ class _LibraryPageState extends State<LibraryPage> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => BookParagraphPage(
-                                          bookId: book['bookId'],
+                                          bookName: book['bookName'],
                                         ),
                                       ),
                                     );
