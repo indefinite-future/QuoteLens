@@ -77,7 +77,10 @@ class _LoginPageState extends State<LoginPage> {
       context: context,
       builder: (BuildContext context) => AlertDialog.adaptive(
         backgroundColor: const Color.fromRGBO(142, 142, 147, 1),
-        title: const Text('Network request failed'),
+        title: const Text(
+          'Network request failed',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         content: const Text(
           'Please wait and try again.',
           style: TextStyle(
@@ -106,8 +109,10 @@ class _LoginPageState extends State<LoginPage> {
       context: context,
       builder: (BuildContext context) => AlertDialog.adaptive(
         backgroundColor: const Color.fromRGBO(142, 142, 147, 1),
-        title: const Text('Wrong email or password',
-            style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text(
+          'Wrong email or password',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         content: const Text(
           'Please enter a valid email address or password',
           style: TextStyle(
@@ -137,8 +142,10 @@ class _LoginPageState extends State<LoginPage> {
       builder: (BuildContext context) {
         return AlertDialog.adaptive(
           backgroundColor: const Color.fromRGBO(142, 142, 147, 1),
-          title: const Text('Too many requests',
-              style: TextStyle(fontWeight: FontWeight.bold)),
+          title: const Text(
+            'Too many requests',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
           content: const Text(
             'Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later.',
             style: TextStyle(
@@ -216,19 +223,20 @@ class _LoginPageState extends State<LoginPage> {
 
                   // Forgot password text
                   Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 50.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            'Forgot password?',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Theme.of(context).colorScheme.tertiary,
-                            ),
+                    padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          'Forgot password?',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Theme.of(context).colorScheme.tertiary,
                           ),
-                        ],
-                      )),
+                        ),
+                      ],
+                    ),
+                  ),
 
                   const SizedBox(height: 20),
 
@@ -246,16 +254,20 @@ class _LoginPageState extends State<LoginPage> {
                       child: Row(
                         children: [
                           Expanded(
-                              child: Divider(
-                                  thickness: 0.5, color: Colors.grey[400])),
-                          Text("   Or continue with   ",
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Theme.of(context).colorScheme.tertiary,
-                              )),
+                            child: Divider(
+                                thickness: 0.5, color: Colors.grey[400]),
+                          ),
+                          Text(
+                            "   Or continue with   ",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).colorScheme.tertiary,
+                            ),
+                          ),
                           Expanded(
-                              child: Divider(
-                                  thickness: 0.5, color: Colors.grey[400])),
+                            child: Divider(
+                                thickness: 0.5, color: Colors.grey[400]),
+                          ),
                         ],
                       )),
 

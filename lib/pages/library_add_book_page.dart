@@ -7,7 +7,7 @@ class AddBooksPage extends StatefulWidget {
   const AddBooksPage({super.key});
 
   @override
-  _AddBooksPageState createState() => _AddBooksPageState();
+  State<AddBooksPage> createState() => _AddBooksPageState();
 }
 
 class _AddBooksPageState extends State<AddBooksPage> {
@@ -79,7 +79,8 @@ class _AddBooksPageState extends State<AddBooksPage> {
                         side: BorderSide(
                             color: Theme.of(context).primaryColor, width: 2),
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
@@ -115,11 +116,13 @@ class _AddBooksPageState extends State<AddBooksPage> {
                           Navigator.pop(context);
                         }
                       },
-                      child: Text('Submit',
-                          style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontSize: 18,
-                          )),
+                      child: Text(
+                        'Submit',
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontSize: 18,
+                        ),
+                      ),
                     ),
                   ),
                 ],

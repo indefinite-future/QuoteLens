@@ -11,9 +11,6 @@ class UserPage extends StatefulWidget {
 
   //sign out function
   void signUserOut() async {
-    // sign out user
-    // if successful, navigate to login page
-    // else, show error message
     await FirebaseAuth.instance.signOut();
   }
 

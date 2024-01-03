@@ -23,52 +23,57 @@ class _BottomNavState extends State<BottomNav> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: _tabScreens[_currentIndex],
-        bottomNavigationBar: Theme(
-            data: ThemeData(
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-            ),
-            child: SizedBox(
-                height: 100, //min 89
-                child: BottomNavigationBar(
-                  backgroundColor: Theme.of(context)
-                      .scaffoldBackgroundColor, //const Color(0xFF212121),
-                  unselectedItemColor: Theme.of(context).primaryColor,
-                  selectedItemColor: Colors.cyan,
-                  showUnselectedLabels: true,
-                  unselectedLabelStyle:
-                      TextStyle(color: Theme.of(context).primaryColor),
-                  selectedLabelStyle: const TextStyle(color: Colors.cyan),
-                  currentIndex: _currentIndex,
-                  onTap: (index) {
-                    setState(() {
-                      _currentIndex = index;
-                    });
-                  },
-                  items: [
-                    BottomNavigationBarItem(
-                      icon: Icon(FeatherIcons.book,
-                          color: Theme.of(context).primaryColor),
-                      activeIcon:
-                          const Icon(FeatherIcons.bookOpen, color: Colors.cyan),
-                      label: 'Library',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(FeatherIcons.bookmark,
-                          color: Theme.of(context).primaryColor),
-                      activeIcon: const Icon(Icons.bookmark_rounded,
-                          color: Colors.cyan),
-                      label: 'Quotes',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.person_outline_rounded,
-                          color: Theme.of(context).primaryColor),
-                      activeIcon:
-                          const Icon(Icons.person_rounded, color: Colors.cyan),
-                      label: 'Profile',
-                    ),
-                  ],
-                ))));
+      body: _tabScreens[_currentIndex],
+      bottomNavigationBar: Theme(
+        data: ThemeData(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+        ),
+        child: SizedBox(
+          height: 100, //min 89
+          child: BottomNavigationBar(
+            backgroundColor: Theme.of(context)
+                .scaffoldBackgroundColor, //const Color(0xFF212121),
+            unselectedItemColor: Theme.of(context).primaryColor,
+            selectedItemColor: Colors.cyan,
+            showUnselectedLabels: true,
+            unselectedLabelStyle:
+                TextStyle(color: Theme.of(context).primaryColor),
+            selectedLabelStyle: const TextStyle(color: Colors.cyan),
+            currentIndex: _currentIndex,
+            onTap: (index) {
+              setState(
+                () {
+                  _currentIndex = index;
+                },
+              );
+            },
+            items: [
+              BottomNavigationBarItem(
+                icon: Icon(FeatherIcons.book,
+                    color: Theme.of(context).primaryColor),
+                activeIcon:
+                    const Icon(FeatherIcons.bookOpen, color: Colors.cyan),
+                label: 'Library',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(FeatherIcons.bookmark,
+                    color: Theme.of(context).primaryColor),
+                activeIcon:
+                    const Icon(Icons.bookmark_rounded, color: Colors.cyan),
+                label: 'Quotes',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person_outline_rounded,
+                    color: Theme.of(context).primaryColor),
+                activeIcon:
+                    const Icon(Icons.person_rounded, color: Colors.cyan),
+                label: 'Profile',
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
