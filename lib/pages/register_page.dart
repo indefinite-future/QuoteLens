@@ -1,3 +1,4 @@
+import 'package:QuoteLens/pages/library_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -79,8 +80,19 @@ class _RegisterPageState extends State<RegisterPage> {
       var doc = await users.where('email', isEqualTo: email).get();
       if (doc.size > 0) {
         // The email is already registered
+        print("The email is already registered.");
         Navigator.pop(context);
         emailAlreadyInUse();
+        return;
+      }
+
+      // Check if the password matches
+      String confirmPassword = confirmPasswordController.text;
+      if (password != confirmPassword) {
+        // The password does not match
+        print("The password does not match.");
+        Navigator.pop(context);
+        passwordNotMatch();
         return;
       }
 
@@ -98,6 +110,7 @@ class _RegisterPageState extends State<RegisterPage> {
       await addUserDetails(email, username);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
         weakPassword();
       } else if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
         wrongInputMessage();
@@ -309,7 +322,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     children: [
                       // Google button
                       SquareTile(
-                          onTap: () => AuthService().signInWithGoogle(),
+                          onTap: () => AuthService().signInWithGoogle,
                           imagepath: 'lib/images/google.png'),
 
                       const SizedBox(width: 25),

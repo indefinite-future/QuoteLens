@@ -60,7 +60,7 @@ class _BookParagraphPageState extends State<BookParagraphPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Click the bottom button to start.'),
+                        Text('Click the bottom button to start OCR.'),
                       ],
                     ),
                   ),

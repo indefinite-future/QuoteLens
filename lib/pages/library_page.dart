@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:QuoteLens/pages/library_add_book_page.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class LibraryPage extends StatefulWidget {
   LibraryPage({super.key});
@@ -46,6 +47,26 @@ class _LibraryPageState extends State<LibraryPage> {
                       return const CircularProgressIndicator();
                     } else if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
+                    } else if (snapshot.data!.docs.isEmpty) {
+                      return const Column(
+                        children: [
+                          SizedBox(height: 300),
+                          Center(
+                            child: Padding(
+                              padding: EdgeInsets.all(20.0),
+                              child: Text(
+                                'No books is added,\n click the bottom right button to \n start adding books now!',
+                                style: TextStyle(
+                                  fontSize: 24.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.cyan,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
                     } else {
                       var books = snapshot.data!.docs.toList();
 
@@ -54,6 +75,7 @@ class _LibraryPageState extends State<LibraryPage> {
                           (a, b) => b['last_click'].compareTo(a['last_click']));
 
                       var latestBook = books.first;
+                      final user = FirebaseAuth.instance.currentUser;
 
                       return Column(
                         children: [
@@ -79,6 +101,71 @@ class _LibraryPageState extends State<LibraryPage> {
                                   .doc(latestBook.id)
                                   .update({'last_click': Timestamp.now()});
                             },
+                            onLongPress: () => showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  AlertDialog.adaptive(
+                                backgroundColor:
+                                    const Color.fromRGBO(142, 142, 147, 1),
+                                title: const Text('Delete Book'),
+                                content: const Text(
+                                  'Are you sure you want to delete this book?',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(context, 'Cancel'),
+                                    child: const Text('Cancel',
+                                        style: TextStyle(color: Colors.cyan)),
+                                  ),
+                                  TextButton(
+                                    onPressed: () async {
+                                      // Delete the book from the database
+                                      await FirebaseFirestore.instance
+                                          .collection('users')
+                                          .doc(user!.uid)
+                                          .collection('books')
+                                          .doc(latestBook.id)
+                                          .delete();
+
+                                      // try {
+                                      //   // Delete the book from the storage
+                                      //   await widget.storageRef
+                                      //       .child(user.uid)
+                                      //       .child(latestBook.id)
+                                      //       .delete();
+                                      // } catch (e) {
+                                      //   if (e is FirebaseException &&
+                                      //       e.code == 'object-not-found') {
+                                      //     print(
+                                      //         'The book was not found in the storage.');
+                                      //   } else {
+                                      //     rethrow;
+                                      //   }
+                                      // }
+
+                                      // Update the latest clicked book
+                                      var books = snapshot.data!.docs.toList();
+                                      books.sort((a, b) => b['last_click']
+                                          .compareTo(a['last_click']));
+                                      await FirebaseFirestore.instance
+                                          .collection('users')
+                                          .doc(user.uid)
+                                          .update({
+                                        'latestClickedBook': latestBook.id
+                                      });
+
+                                      Navigator.pop(context, 'OK');
+                                    },
+                                    child: const Text('OK',
+                                        style: TextStyle(color: Colors.red)),
+                                  ),
+                                ],
+                              ),
+                            ),
                             child: Container(
                               width: 400,
                               height: 160,
@@ -174,6 +261,7 @@ class _LibraryPageState extends State<LibraryPage> {
                                         ),
                                       ),
                                     );
+
                                     final user =
                                         FirebaseAuth.instance.currentUser;
                                     await FirebaseFirestore.instance
@@ -190,6 +278,75 @@ class _LibraryPageState extends State<LibraryPage> {
                                         .update(
                                             {'last_click': Timestamp.now()});
                                   },
+                                  onLongPress: () => showDialog<String>(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        AlertDialog.adaptive(
+                                      backgroundColor: const Color.fromRGBO(
+                                          142, 142, 147, 1),
+                                      title: const Text('Delete Book'),
+                                      content: const Text(
+                                        'Are you sure you want to delete this book?',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context, 'Cancel'),
+                                          child: const Text('Cancel',
+                                              style: TextStyle(
+                                                  color: Colors.cyan)),
+                                        ),
+                                        TextButton(
+                                          onPressed: () async {
+                                            // Delete the book from the database
+                                            await FirebaseFirestore.instance
+                                                .collection('users')
+                                                .doc(user!.uid)
+                                                .collection('books')
+                                                .doc(book.id)
+                                                .delete();
+
+                                            // try {
+                                            //   // Delete the book from the storage
+                                            //   await widget.storageRef
+                                            //       .child(user.uid)
+                                            //       .child(book.id)
+                                            //       .delete();
+                                            // } catch (e) {
+                                            //   if (e is FirebaseException &&
+                                            //       e.code ==
+                                            //           'object-not-found') {
+                                            //     print(
+                                            //         'The book was not found in the storage.');
+                                            //   } else {
+                                            //     rethrow;
+                                            //   }
+                                            // }
+
+                                            // Update the latest clicked book
+                                            // var books =
+                                            //     snapshot.data!.docs.toList();
+                                            // books.sort((a, b) => b['last_click']
+                                            //     .compareTo(a['last_click']));
+                                            // await FirebaseFirestore.instance
+                                            //     .collection('users')
+                                            //     .doc(user.uid)
+                                            //     .update({
+                                            //   'latestClickedBook': latestBook.id
+                                            // });
+
+                                            Navigator.pop(context, 'OK');
+                                          },
+                                          child: const Text('OK',
+                                              style:
+                                                  TextStyle(color: Colors.red)),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               );
                             },
