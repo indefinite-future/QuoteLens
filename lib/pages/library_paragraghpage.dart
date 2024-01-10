@@ -11,6 +11,8 @@ class BookParagraphPage extends StatefulWidget {
 }
 
 class _BookParagraphPageState extends State<BookParagraphPage> {
+  bool _showButtons = false;
+
   Future<String> getBookName() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
@@ -47,36 +49,97 @@ class _BookParagraphPageState extends State<BookParagraphPage> {
             ),
           );
         } else {
-          return Scaffold(
-            appBar: AppBar(
-              title: Text('${snapshot.data}'),
-            ),
-            backgroundColor: Theme.of(context).colorScheme.background,
-            body: SafeArea(
-              child: SingleChildScrollView(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(),
-                  child: const Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Click the bottom button to start OCR.'),
-                      ],
+          return Stack(
+            children: [
+              Scaffold(
+                appBar: AppBar(
+                  title: Text('${snapshot.data}'),
+                ),
+                backgroundColor: Theme.of(context).colorScheme.background,
+                body: SafeArea(
+                  child: SingleChildScrollView(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(),
+                      child: const Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('Click the bottom button to start OCR.'),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ),
+                floatingActionButton: FloatingActionButton(
+                  onPressed: () {
+                    setState(
+                      () {
+                        _showButtons = !_showButtons;
+                      },
+                    );
+                  },
+                  backgroundColor: Colors.cyan,
+                  child: const Icon(Icons.add),
+                ),
               ),
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => ),
-                // );
-              },
-              backgroundColor: Colors.cyan,
-              child: const Icon(Icons.add),
-            ),
+              if (_showButtons)
+                Stack(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        setState(
+                          () {
+                            _showButtons = !_showButtons;
+                          },
+                        );
+                      },
+                      child: Container(
+                        color: Colors.black.withOpacity(0.5),
+                      ),
+                    ),
+                    Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          SizedBox(
+                            height: 100,
+                            width: 200,
+                            child: FloatingActionButton(
+                              onPressed: () {
+                                // Your code here
+                              },
+                              child: Text(
+                                'Manual input',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 100,
+                            width: 200,
+                            child: FloatingActionButton(
+                              onPressed: () {
+                                // Your code here
+                              },
+                              child: Text(
+                                'Using OCR',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+            ],
           );
         }
       },
