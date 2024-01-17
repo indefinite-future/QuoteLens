@@ -1,8 +1,15 @@
 # Uncomment this line to define a global platform for your project
-# platform :ios, '11.0'
+platform :ios, '12.0'
+use_frameworks!
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
+
+pod 'GoogleMLKit/TextRecognition', '~> 4.0.0'
+# To recognize Chinese script
+pod 'GoogleMLKit/TextRecognitionChinese', '~> 4.0.0'
+pod 'MLKitTextRecognitionCommon', '1.0.0'
+pod 'GTMSessionFetcher/Core', '2.1.0'
 
 project 'Runner', {
   'Debug' => :debug,
@@ -48,7 +55,7 @@ post_install do |installer|
   installer.pods_project.targets.each do |target|
      flutter_additional_ios_build_settings(target)
       target.build_configurations.each do |config|
-        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '10.0'
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
         xcconfig_path = config.base_configuration_reference.real_path
         xcconfig = File.read(xcconfig_path)
         xcconfig_mod = xcconfig.gsub(/DT_TOOLCHAIN_DIR/, "TOOLCHAIN_DIR")
