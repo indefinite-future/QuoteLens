@@ -640,6 +640,8 @@ PODS:
   - BoringSSL-GRPC/Implementation (0.0.24):
     - BoringSSL-GRPC/Interface (= 0.0.24)
   - BoringSSL-GRPC/Interface (0.0.24)
+  - camera_avfoundation (0.0.1):
+    - Flutter
   - cloud_firestore (4.13.6):
     - Firebase/Firestore (= 10.18.0)
     - firebase_core
@@ -812,6 +814,7 @@ PODS:
     - FlutterMacOS
 
 DEPENDENCIES:
+  - camera_avfoundation (from `.symlinks/plugins/camera_avfoundation/ios`)
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
@@ -848,6 +851,8 @@ SPEC REPOS:
     - RecaptchaInterop
 
 EXTERNAL SOURCES:
+  camera_avfoundation:
+    :path: ".symlinks/plugins/camera_avfoundation/ios"
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
   firebase_auth:
@@ -867,6 +872,7 @@ SPEC CHECKSUMS:
   abseil: 926fb7a82dc6d2b8e1f2ed7f3a718bce691d1e46
   AppAuth: 3bb1d1cd9340bd09f5ed189fb00b1cc28e1e8570
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
+  camera_avfoundation: 759172d1a77ae7be0de08fc104cfb79738b8a59e
   cloud_firestore: c29d4c2e96fe31374d9dab458a99d7a488d3a735
   Firebase: 414ad272f8d02dfbf12662a9d43f4bba9bec2a06
   firebase_auth: df44e14f8a93e8a9869d91695bd3f8e53d2c9f5a
@@ -882,7 +888,7 @@ SPEC CHECKSUMS:
   FirebaseFirestoreInternal: 3d5d03f2447caae64311d2cda92abbf4ec5241be
   FirebaseSharedSwift: 62e248642c0582324d0390706cadd314687c116b
   FirebaseStorage: 8333c4b183764cdd170d9539a61322b71c23adff
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   google_sign_in_ios: ede92ec558c3a73ec07cb180f31820152fb8ca89
   GoogleSignIn: b232380cf495a429b8095d3178a8d5855b42e842
   GoogleUtilities: 0759d1a57ebb953965c2dfe0ba4c82e95ccc2e34
@@ -896,6 +902,6 @@ SPEC CHECKSUMS:
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
   shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
 
-PODFILE CHECKSUM: 799f63403909cca069c569a50aff72eb151e8491
+PODFILE CHECKSUM: fad1f896bdfdf0f988e048fa006b21b5c61eba91
 
 COCOAPODS: 1.14.3
