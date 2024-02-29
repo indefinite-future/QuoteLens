@@ -16,7 +16,7 @@ class _TextRecognizerPageState extends State<TextRecognizerPage> {
   @override
   void initState() {
     super.initState();
-    initializeCamera();
+    initializeCamera().then((_) => recognizedText);
   }
 
   Future<void> initializeCamera() async {

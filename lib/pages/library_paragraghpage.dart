@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'text_recognition.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'library_manual_input.dart';
+//import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
 class BookParagraphPage extends StatefulWidget {
   final String bookName;
@@ -106,8 +109,16 @@ class _BookParagraphPageState extends State<BookParagraphPage> {
                             height: 100,
                             width: 200,
                             child: FloatingActionButton(
+                              heroTag: "ManualButton",
                               onPressed: () {
                                 // Your code here
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const QuillEditorPage(),
+                                  ),
+                                );
                               },
                               child: Text(
                                 'Manual input',
@@ -122,8 +133,15 @@ class _BookParagraphPageState extends State<BookParagraphPage> {
                             height: 100,
                             width: 200,
                             child: FloatingActionButton(
+                              heroTag: "OCRButton",
                               onPressed: () {
-                                // Your code here
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const TextRecognizerPage(),
+                                  ),
+                                );
                               },
                               child: Text(
                                 'Using OCR',
