@@ -1,5 +1,6 @@
+import 'package:QuoteLens/pages/gallery_view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'text_recognition.dart';
+import 'text_detector_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'library_manual_input.dart';
@@ -139,7 +140,7 @@ class _BookParagraphPageState extends State<BookParagraphPage> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        const TextRecognizerPage(),
+                                        const TextRecognizerView(),
                                   ),
                                 );
                               },

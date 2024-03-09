@@ -15,7 +15,7 @@ let textRecognizer = TextRecognizer.textRecognizer()
 
 // When using Chinese script recognition SDK
 let chineseOptions = ChineseTextRecognizerOptions()
-let chineseTextRecognizer = TextRecognizer.textRecognizer()
+	let chineseTextRecognizer = TextRecognizer.textRecognizer()
 
 
 // // When using Chinese script recognition
