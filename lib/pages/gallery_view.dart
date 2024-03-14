@@ -43,6 +43,7 @@ class _GalleryViewState extends State<GalleryView> {
     return Scaffold(
         appBar: AppBar(
           title: Text(widget.title),
+          backgroundColor: Theme.of(context).colorScheme.background,
           actions: [
             Padding(
               padding: EdgeInsets.only(right: 20.0),
@@ -75,18 +76,25 @@ class _GalleryViewState extends State<GalleryView> {
               Icons.image,
               size: 200,
             ),
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16),
-        child: ElevatedButton(
-          onPressed: _getImageAsset,
-          child: Text('From Assets'),
-        ),
-      ),
+      // Padding(
+      //   padding: EdgeInsets.symmetric(horizontal: 16),
+      //   child: ElevatedButton(
+      //       onPressed: _getImageAsset,
+      //       child: Text('From Assets'),
+      //       style: ButtonStyle(
+      //         foregroundColor: MaterialStateProperty.all<Color>(
+      //             Theme.of(context).primaryColor),
+      //       )),
+      // ),
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 16),
         child: ElevatedButton(
           child: Text('From Gallery'),
           onPressed: () => _getImage(ImageSource.gallery),
+          style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(
+                Theme.of(context).primaryColor),
+          ),
         ),
       ),
       Padding(
@@ -94,6 +102,10 @@ class _GalleryViewState extends State<GalleryView> {
         child: ElevatedButton(
           child: Text('Take a picture'),
           onPressed: () => _getImage(ImageSource.camera),
+          style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(
+                Theme.of(context).primaryColor),
+          ),
         ),
       ),
       if (_image != null)

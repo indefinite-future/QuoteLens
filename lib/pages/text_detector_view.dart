@@ -13,8 +13,8 @@ class TextRecognizerView extends StatefulWidget {
 }
 
 class _TextRecognizerViewState extends State<TextRecognizerView> {
-  var _script = TextRecognitionScript.latin;
-  var _textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
+  var _script = TextRecognitionScript.chinese;
+  var _textRecognizer = TextRecognizer(script: TextRecognitionScript.chinese);
   bool _canProcess = true;
   bool _isBusy = false;
   CustomPaint? _customPaint;
@@ -42,7 +42,7 @@ class _TextRecognizerViewState extends State<TextRecognizerView> {
         ),
         Positioned(
             top: 30,
-            left: 100,
+            left: -20,
             right: 100,
             child: Row(
               children: [

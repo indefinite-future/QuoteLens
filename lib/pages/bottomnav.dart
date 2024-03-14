@@ -30,7 +30,8 @@ class _BottomNavState extends State<BottomNav> {
           highlightColor: Colors.transparent,
         ),
         child: SizedBox(
-          height: 100, //min 89
+          height: MediaQuery.of(context).size.width *
+              0.22, // 80% of screen width, //min 89
           child: BottomNavigationBar(
             backgroundColor: Theme.of(context)
                 .scaffoldBackgroundColor, //const Color(0xFF212121),
