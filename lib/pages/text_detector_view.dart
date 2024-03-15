@@ -1,25 +1,38 @@
+import 'package:QuoteLens/provider/language_provider.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:provider/provider.dart';
 
 import 'detector_view.dart';
 import 'painters/text_detector_painter.dart';
 
 class TextRecognizerView extends StatefulWidget {
-  const TextRecognizerView({super.key});
+  final String bookName;
+
+  const TextRecognizerView({required this.bookName, super.key});
 
   @override
   State<TextRecognizerView> createState() => _TextRecognizerViewState();
 }
 
 class _TextRecognizerViewState extends State<TextRecognizerView> {
-  var _script = TextRecognitionScript.chinese;
-  var _textRecognizer = TextRecognizer(script: TextRecognitionScript.chinese);
+  var _script;
+  var _textRecognizer;
   bool _canProcess = true;
   bool _isBusy = false;
   CustomPaint? _customPaint;
   String? _text;
   var _cameraLensDirection = CameraLensDirection.back;
+
+  @override
+  void initState() {
+    super.initState();
+    final languageProvider =
+        Provider.of<LanguageProvider>(context, listen: false);
+    _script = languageProvider.script;
+    _textRecognizer = TextRecognizer(script: _script);
+  }
 
   @override
   void dispose() async {
@@ -31,73 +44,42 @@ class _TextRecognizerViewState extends State<TextRecognizerView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(children: [
-        DetectorView(
-          title: 'Text Detector',
-          customPaint: _customPaint,
-          text: _text,
-          onImage: _processImage,
-          initialCameraLensDirection: _cameraLensDirection,
-          onCameraLensDirectionChanged: (value) => _cameraLensDirection = value,
-        ),
-        Positioned(
-            top: 30,
-            left: -20,
-            right: 100,
-            child: Row(
-              children: [
-                Spacer(),
-                Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black54,
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: _buildDropdown(),
-                    )),
-                Spacer(),
-              ],
-            )),
-      ]),
+      body: Stack(
+        children: [
+          DetectorView(
+            title: 'Text Detector',
+            customPaint: _customPaint,
+            text: _text,
+            bookName: widget.bookName,
+            onImage: _processImage,
+            initialCameraLensDirection: _cameraLensDirection,
+            onCameraLensDirectionChanged: (value) =>
+                _cameraLensDirection = value,
+          ),
+        ],
+      ),
     );
   }
 
-  Widget _buildDropdown() => DropdownButton<TextRecognitionScript>(
-        value: _script,
-        icon: const Icon(Icons.arrow_downward),
-        elevation: 16,
-        style: const TextStyle(color: Colors.blue),
-        underline: Container(
-          height: 2,
-          color: Colors.blue,
-        ),
-        onChanged: (TextRecognitionScript? script) {
-          if (script != null) {
-            setState(() {
-              _script = script;
-              _textRecognizer.close();
-              _textRecognizer = TextRecognizer(script: _script);
-            });
-          }
-        },
-        items: TextRecognitionScript.values
-            .map<DropdownMenuItem<TextRecognitionScript>>((script) {
-          return DropdownMenuItem<TextRecognitionScript>(
-            value: script,
-            child: Text(script.name),
-          );
-        }).toList(),
-      );
-
   Future<void> _processImage(InputImage inputImage) async {
-    if (!_canProcess) return;
-    if (_isBusy) return;
+    final languageProvider =
+        Provider.of<LanguageProvider>(context, listen: false);
+    _script = languageProvider.script;
+    print('Processing image with script language: $_script');
+    if (!_canProcess) {
+      print('Cannot process image');
+      return;
+    }
+    if (_isBusy) {
+      print('Is busy');
+      return;
+    }
     _isBusy = true;
     setState(() {
       _text = '';
     });
     final recognizedText = await _textRecognizer.processImage(inputImage);
+    print('Recognized text: ${recognizedText.text}');
     if (inputImage.metadata?.size != null &&
         inputImage.metadata?.rotation != null) {
       final painter = TextRecognizerPainter(
@@ -108,7 +90,7 @@ class _TextRecognizerViewState extends State<TextRecognizerView> {
       );
       _customPaint = CustomPaint(painter: painter);
     } else {
-      _text = 'Recognized text:\n\n${recognizedText.text}';
+      _text = '${recognizedText.text}';
       // TODO: set _customPaint to draw boundingRect on top of image
       _customPaint = null;
     }

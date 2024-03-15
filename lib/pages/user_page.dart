@@ -1,7 +1,9 @@
-import 'package:QuoteLens/themes/theme_provider.dart';
+import 'package:QuoteLens/components/language_list.dart';
+import 'package:QuoteLens/provider/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:provider/provider.dart';
 
 class UserPage extends StatefulWidget {
@@ -19,6 +21,17 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
+  TextRecognitionScript _script = TextRecognitionScript.latin;
+  var _textRecognizer = TextRecognizer(script: TextRecognitionScript.chinese);
+
+  void _onScriptChanged(TextRecognitionScript script) {
+    setState(() {
+      _script = script;
+      _textRecognizer.close();
+      _textRecognizer = TextRecognizer(script: _script);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,7 +104,18 @@ class _UserPageState extends State<UserPage> {
                       },
                       secondary: const Icon(Icons.lightbulb_outline),
                     ),
-                  )
+                  ),
+
+                  const SizedBox(height: 30),
+
+                  //Preferred scanning language
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                    child: LanguageList(
+                      initialScript: _script,
+                      onScriptChanged: _onScriptChanged,
+                    ),
+                  ),
                 ],
               ),
             ),

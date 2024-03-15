@@ -1,17 +1,19 @@
-import 'dart:convert';
 import 'dart:io';
 
+import 'package:QuoteLens/components/language_list.dart';
+import 'package:QuoteLens/pages/library_manual_input.dart';
+import 'package:QuoteLens/provider/language_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mlkit_commons/google_mlkit_commons.dart';
 import 'package:image_picker/image_picker.dart';
-
-import 'utils.dart';
+import 'package:provider/provider.dart';
 
 class GalleryView extends StatefulWidget {
   GalleryView(
       {Key? key,
       required this.title,
+      required this.bookName,
       this.text,
       required this.onImage,
       required this.onDetectorViewModeChanged})
@@ -19,6 +21,7 @@ class GalleryView extends StatefulWidget {
 
   final String title;
   final String? text;
+  final String bookName;
   final Function(InputImage inputImage) onImage;
   final Function()? onDetectorViewModeChanged;
 
@@ -41,80 +44,121 @@ class _GalleryViewState extends State<GalleryView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-          backgroundColor: Theme.of(context).colorScheme.background,
-          actions: [
-            Padding(
-              padding: EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: widget.onDetectorViewModeChanged,
-                child: Icon(
-                  Platform.isIOS ? Icons.camera_alt_outlined : Icons.camera,
-                ),
+      appBar: AppBar(
+        title: Text(widget.title),
+        backgroundColor: Theme.of(context).colorScheme.background,
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 20.0),
+            child: GestureDetector(
+              onTap: widget.onDetectorViewModeChanged,
+              child: Icon(
+                Platform.isIOS ? Icons.camera_alt_outlined : Icons.camera,
               ),
             ),
-          ],
-        ),
-        body: _galleryBody());
+          ),
+        ],
+      ),
+      body: _galleryBody(),
+    );
   }
 
   Widget _galleryBody() {
-    return ListView(shrinkWrap: true, children: [
-      _image != null
-          ? SizedBox(
-              height: 400,
-              width: 400,
-              child: Stack(
-                fit: StackFit.expand,
-                children: <Widget>[
-                  Image.file(_image!),
-                ],
-              ),
-            )
-          : Icon(
-              Icons.image,
-              size: 200,
+    final languageProvider = Provider.of<LanguageProvider>(context);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: ListView(
+        shrinkWrap: true,
+        children: [
+          _image != null
+              ? SizedBox(
+                  height: 450,
+                  width: 450,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: <Widget>[
+                      Image.file(_image!),
+                    ],
+                  ),
+                )
+              : const Icon(
+                  Icons.image,
+                  size: 200,
+                ),
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(vertical: 30.0, horizontal: 16.0),
+            child: LanguageList(
+              initialScript: languageProvider.script,
+              onScriptChanged: (script) {
+                languageProvider.script = script;
+              },
             ),
-      // Padding(
-      //   padding: EdgeInsets.symmetric(horizontal: 16),
-      //   child: ElevatedButton(
-      //       onPressed: _getImageAsset,
-      //       child: Text('From Assets'),
-      //       style: ButtonStyle(
-      //         foregroundColor: MaterialStateProperty.all<Color>(
-      //             Theme.of(context).primaryColor),
-      //       )),
-      // ),
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16),
-        child: ElevatedButton(
-          child: Text('From Gallery'),
-          onPressed: () => _getImage(ImageSource.gallery),
-          style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all<Color>(
-                Theme.of(context).primaryColor),
           ),
-        ),
-      ),
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16),
-        child: ElevatedButton(
-          child: Text('Take a picture'),
-          onPressed: () => _getImage(ImageSource.camera),
-          style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all<Color>(
-                Theme.of(context).primaryColor),
+          if (widget.text != null && widget.text!.isNotEmpty)
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 30.0, horizontal: 16.0),
+              child: Text(
+                'Recognized text:\n\n ${widget.text}',
+              ),
+            ),
+          if (widget.text != null && widget.text!.isNotEmpty)
+            Column(
+              children: [
+                ElevatedButton(
+                  child: Text('Edit',
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                      )),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => QuillEditorPage(
+                          quoteText: widget.text ??
+                              '', // If widget.text is null, pass an empty string
+                          bookName: widget
+                              .bookName, // Replace this with your actual bookName
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                const Divider(
+                  thickness: 0.5,
+                  color: Colors.grey,
+                ),
+              ],
+            ),
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(vertical: 0.0, horizontal: 30.0),
+            child: ElevatedButton(
+              child: Text('From Gallery'),
+              onPressed: () => _getImage(ImageSource.gallery),
+              style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all<Color>(
+                    Theme.of(context).primaryColor),
+              ),
+            ),
           ),
-        ),
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(vertical: 0.0, horizontal: 30.0),
+            child: ElevatedButton(
+              child: Text('Take a picture'),
+              onPressed: () => _getImage(ImageSource.camera),
+              style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all<Color>(
+                    Theme.of(context).primaryColor),
+              ),
+            ),
+          ),
+        ],
       ),
-      if (_image != null)
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Text(
-              '${_path == null ? '' : 'Image path: $_path'}\n\n${widget.text ?? ''}'),
-        ),
-    ]);
+    );
   }
 
   Future _getImage(ImageSource source) async {
@@ -128,69 +172,12 @@ class _GalleryViewState extends State<GalleryView> {
     }
   }
 
-  Future _getImageAsset() async {
-    final manifestContent = await rootBundle.loadString('AssetManifest.json');
-    final Map<String, dynamic> manifestMap = json.decode(manifestContent);
-    final assets = manifestMap.keys
-        .where((String key) => key.contains('images/'))
-        .where((String key) =>
-            key.contains('.jpg') ||
-            key.contains('.jpeg') ||
-            key.contains('.png') ||
-            key.contains('.webp'))
-        .toList();
-
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Dialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30.0)),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Select image',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  ConstrainedBox(
-                    constraints: BoxConstraints(
-                        maxHeight: MediaQuery.of(context).size.height * 0.7),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          for (final path in assets)
-                            GestureDetector(
-                              onTap: () async {
-                                Navigator.of(context).pop();
-                                _processFile(await getAssetPath(path));
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Image.asset(path),
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  ElevatedButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      child: Text('Cancel')),
-                ],
-              ),
-            ),
-          );
-        });
-  }
-
   Future _processFile(String path) async {
     setState(() {
       _image = File(path);
     });
     _path = path;
+    print('Image path: $_path');
     final inputImage = InputImage.fromFilePath(path);
     widget.onImage(inputImage);
   }

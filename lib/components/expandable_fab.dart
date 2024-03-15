@@ -24,14 +24,31 @@ class _ExpandableFabState extends State<ExpandableFab>
       mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: widget.children.map((child) {
-        return _open
-            ? Column(
-                children: [
-                  child,
-                  const SizedBox(height: 10),
-                ],
-              )
-            : Container();
+        if (child is ActionButton) {
+          return _open
+              ? Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Flexible(
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 10.0),
+                            child: Text(child.tooltip ?? '',
+                                style: TextStyle(
+                                    color: Theme.of(context).primaryColor)),
+                          ),
+                        ),
+                        child,
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                  ],
+                )
+              : Container();
+        } else {
+          return Container();
+        }
       }).toList()
         ..add(
           FloatingActionButton(

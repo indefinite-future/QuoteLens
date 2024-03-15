@@ -1,5 +1,5 @@
-import 'package:QuoteLens/themes/theme_provider.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:QuoteLens/provider/language_provider.dart';
+import 'package:QuoteLens/provider/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:QuoteLens/pages/auth_page.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -12,8 +12,11 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => ThemeProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ThemeProvider()),
+        ChangeNotifierProvider(create: (context) => LanguageProvider()),
+      ],
       child: const MyApp(),
     ),
   );

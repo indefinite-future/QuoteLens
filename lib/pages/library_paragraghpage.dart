@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'library_manual_input.dart';
 import '../components/expandable_fab.dart';
-//import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
 class BookParagraphPage extends StatefulWidget {
   final String bookName;
@@ -15,7 +14,7 @@ class BookParagraphPage extends StatefulWidget {
 }
 
 class _BookParagraphPageState extends State<BookParagraphPage> {
-  bool _showButtons = false;
+  //bool _showButtons = false;
 
   Future<String> getBookName() async {
     final user = FirebaseAuth.instance.currentUser;
@@ -41,52 +40,75 @@ class _BookParagraphPageState extends State<BookParagraphPage> {
     }
   }
 
-  Future<List<DocumentSnapshot>> getQuotes(String bookName) async {
+  Future<String> getBookId(String bookName) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      print('No user is signed in.');
+      return '';
+    }
+
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .collection('books')
+        .where('bookName', isEqualTo: bookName)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      return querySnapshot.docs.first.id;
+    } else {
+      print('No book found with the given name.');
+      return '';
+    }
+  }
+
+  Stream<List<DocumentSnapshot>> getQuotes(String bookId) {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       throw Exception('Must be logged in to get quotes');
     }
 
-    final userRef =
-        FirebaseFirestore.instance.collection('users').doc(user.uid);
-    final bookSnapshot = await userRef
+    // print('User ID: ${user.uid}'); // print user id
+    // print('Book ID: $bookId'); // print book id
+
+    final quotesRef = FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
         .collection('books')
-        .where('bookName', isEqualTo: bookName)
-        .get();
+        .doc(bookId)
+        .collection('quotes')
+        .snapshots()
+        .map((querySnapshot) {
+      return querySnapshot.docs.where((doc) {
+        return doc.exists && doc.data().containsKey('quote');
+      }).toList();
+    });
 
-    if (bookSnapshot.docs.isEmpty) {
-      throw Exception('No book found with name: $bookName');
-    }
-
-    final bookId = bookSnapshot.docs.first.id;
-    final bookRef = userRef.collection('books').doc(bookId);
-
-    final QuerySnapshot quoteSnapshot =
-        await bookRef.collection('quotes').get();
-
-    return quoteSnapshot.docs;
+    return quotesRef;
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<String>(
-      future: getBookName(),
+      future: getBookId(widget.bookName),
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(
             appBar: AppBar(
               title: const Text('Loading...'),
+              backgroundColor: Theme.of(context).colorScheme.background,
             ),
           );
         } else {
-          return FutureBuilder<List<DocumentSnapshot>>(
-            future: getQuotes(snapshot.data!),
+          return StreamBuilder<List<DocumentSnapshot>>(
+            stream: getQuotes(snapshot.data!),
             builder: (BuildContext context,
                 AsyncSnapshot<List<DocumentSnapshot>> quoteSnapshot) {
               if (quoteSnapshot.connectionState == ConnectionState.waiting) {
                 return Scaffold(
                   appBar: AppBar(
                     title: const Text('Loading quotes...'),
+                    backgroundColor: Theme.of(context).colorScheme.background,
                   ),
                 );
               } else {
@@ -95,7 +117,9 @@ class _BookParagraphPageState extends State<BookParagraphPage> {
                     Scaffold(
                       backgroundColor: Theme.of(context).colorScheme.background,
                       appBar: AppBar(
-                        title: Text('${snapshot.data}'),
+                        title: Text('${widget.bookName}'),
+                        backgroundColor:
+                            Theme.of(context).colorScheme.background,
                       ),
                       body: ListView.builder(
                         shrinkWrap: true,
@@ -104,6 +128,7 @@ class _BookParagraphPageState extends State<BookParagraphPage> {
                             : const NeverScrollableScrollPhysics(),
                         itemCount: quoteSnapshot.data!.length,
                         itemBuilder: (context, index) {
+                          final quoteId = quoteSnapshot.data![index].id;
                           final quote = quoteSnapshot.data![index].get('quote');
                           return Container(
                             width: 400,
@@ -115,17 +140,32 @@ class _BookParagraphPageState extends State<BookParagraphPage> {
                               color: Theme.of(context).colorScheme.primary,
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            child: ListTile(
-                              title: Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 3.0, bottom: 3.0),
-                                child: Text(
-                                  quote,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    color: Theme.of(context).primaryColor,
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => QuillEditorPage(
+                                      bookName: widget.bookName,
+                                      quoteId:
+                                          quoteId, // replace with your actual quote id
+                                      quoteText: quote, // pass the quote text
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: ListTile(
+                                title: Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 3.0, bottom: 3.0),
+                                  child: Text(
+                                    quote,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: Theme.of(context).primaryColor,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -138,15 +178,16 @@ class _BookParagraphPageState extends State<BookParagraphPage> {
                         children: [
                           ActionButton(
                             heroTag: 'manualInput',
-                            onPressed: () {
+                            onPressed: () async {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => QuillEditorPage(
-                                    bookName: snapshot.data!,
+                                    bookName: widget.bookName,
                                   ),
                                 ),
                               );
+                              setState(() {});
                             },
                             icon: const Icon(Icons.keyboard),
                             tooltip: 'Manual input',
@@ -156,14 +197,16 @@ class _BookParagraphPageState extends State<BookParagraphPage> {
                           ),
                           ActionButton(
                             heroTag: 'ocr',
-                            onPressed: () {
+                            onPressed: () async {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      const TextRecognizerView(),
+                                  builder: (context) => TextRecognizerView(
+                                    bookName: widget.bookName,
+                                  ),
                                 ),
                               );
+                              setState(() {});
                             },
                             icon: const Icon(Icons.camera),
                             tooltip: 'Using OCR',

@@ -5,15 +5,20 @@ import 'package:flutter_quill/flutter_quill.dart';
 
 class QuillEditorPage extends StatefulWidget {
   final String bookName;
-  const QuillEditorPage({super.key, required this.bookName});
+  final String? quoteId;
+  final String? quoteText;
+
+  const QuillEditorPage(
+      {super.key, required this.bookName, this.quoteId, this.quoteText});
 
   @override
   State<QuillEditorPage> createState() => _QuillEditorPageState();
 }
 
 class _QuillEditorPageState extends State<QuillEditorPage> {
-  final QuillController _controller = QuillController.basic();
-  bool _readOnly = false; // add this line
+  late QuillController _controller = QuillController.basic();
+  late bool _readOnly = false;
+  late bool _multiRowsDisplay = true;
 
   Future<void> createQuote(String quote) async {
     final user = FirebaseAuth.instance.currentUser;
@@ -35,19 +40,30 @@ class _QuillEditorPageState extends State<QuillEditorPage> {
     final bookId = bookSnapshot.docs.first.id;
     final bookRef = userRef.collection('books').doc(bookId);
 
-    final quoteRef = bookRef.collection('quotes').doc();
-
-    await quoteRef.set({
-      'quote': quote,
-      'createdAt': Timestamp.now(),
-      'lastUpdatedAt': Timestamp.now(),
-      'bookName': widget.bookName,
-    });
+    if (widget.quoteId != null) {
+      // Update the existing quote
+      final quoteRef = bookRef.collection('quotes').doc(widget.quoteId);
+      await quoteRef.update({
+        'quote': quote,
+        'lastUpdatedAt': Timestamp.now(),
+      });
+    } else {
+      // Create a new quote
+      final quoteRef = bookRef.collection('quotes').doc();
+      await quoteRef.set({
+        'quote': quote,
+        'createdAt': Timestamp.now(),
+        'lastUpdatedAt': Timestamp.now(),
+        'bookName': widget.bookName,
+        'bookId': bookId,
+      });
+    }
   }
 
   void _toggleReadOnly() {
     setState(() {
       _readOnly = !_readOnly;
+      _multiRowsDisplay = !_readOnly;
     });
   }
 
@@ -55,6 +71,15 @@ class _QuillEditorPageState extends State<QuillEditorPage> {
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = QuillController.basic();
+    _controller.document.insert(0, widget.quoteText ?? '');
+    _readOnly = widget.quoteId != null;
+    _multiRowsDisplay = !_readOnly;
   }
 
   @override
@@ -85,6 +110,7 @@ class _QuillEditorPageState extends State<QuillEditorPage> {
           QuillToolbar.simple(
             configurations: QuillSimpleToolbarConfigurations(
               controller: _controller,
+              multiRowsDisplay: _multiRowsDisplay,
               sharedConfigurations: const QuillSharedConfigurations(
                 locale: Locale('en'),
               ),

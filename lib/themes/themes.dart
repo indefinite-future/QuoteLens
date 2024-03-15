@@ -7,7 +7,7 @@ ThemeData darkTheme = ThemeData(
   primarySwatch: Colors.grey,
   primaryColor: Colors.white,
   brightness: Brightness.dark,
-  scaffoldBackgroundColor: Colors.black38,
+  scaffoldBackgroundColor: Colors.grey[800],
   colorScheme: ColorScheme.dark(
     background: Colors.grey[800]!,
     primary: Colors.grey[700]!,
