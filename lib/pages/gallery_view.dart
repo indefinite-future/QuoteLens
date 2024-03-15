@@ -139,6 +139,7 @@ class _GalleryViewState extends State<GalleryView> {
               child: Text('From Gallery'),
               onPressed: () => _getImage(ImageSource.gallery),
               style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.cyan),
                 foregroundColor: MaterialStateProperty.all<Color>(
                     Theme.of(context).primaryColor),
               ),
@@ -151,8 +152,9 @@ class _GalleryViewState extends State<GalleryView> {
               child: Text('Take a picture'),
               onPressed: () => _getImage(ImageSource.camera),
               style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all<Color>(
-                    Theme.of(context).primaryColor),
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.cyan),
+                // foregroundColor: MaterialStateProperty.all<Color>(
+                //     Theme.of(context).primaryColor),
               ),
             ),
           ),

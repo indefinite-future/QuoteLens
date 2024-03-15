@@ -87,6 +87,7 @@ class _QuillEditorPageState extends State<QuillEditorPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Quote Editor'),
+        backgroundColor: Theme.of(context).colorScheme.background,
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.save),
