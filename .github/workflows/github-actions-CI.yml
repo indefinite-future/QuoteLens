@@ -14,7 +14,9 @@ jobs:
     name: Build Android
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
       - uses: actions/setup-java@v4
         with:
           distribution: "zulu"
@@ -27,15 +29,32 @@ jobs:
       - run: flutter pub get
       - run: flutter --version
       #- run: flutter test
-      - run: flutter build apk
+      - run: flutter build apk --release
       - run: flutter build appbundle
-      - uses: actions/upload-artifact@v4
+
+      - name: Create Artifact
+        uses: actions/upload-artifact@v4
         with:
           name: QuoteLens-apk
           path: build/app/outputs/flutter-apk/app-release.apk
-      - uses: softprops/action-gh-release@v2
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v2
         with:
           files: build/app/outputs/flutter-apk/app-release.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   apple:
     name: Build iOS
