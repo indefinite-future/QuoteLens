@@ -136,12 +136,15 @@ class _GalleryViewState extends State<GalleryView> {
             padding:
                 const EdgeInsets.symmetric(vertical: 0.0, horizontal: 30.0),
             child: ElevatedButton(
-              child: Text('From Gallery'),
               onPressed: () => _getImage(ImageSource.gallery),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.cyan),
                 foregroundColor: MaterialStateProperty.all<Color>(
                     Theme.of(context).primaryColor),
+              ),
+              child: Text(
+                'From Gallery',
+                style: TextStyle(color: Theme.of(context).primaryColor),
               ),
             ),
           ),
@@ -149,12 +152,15 @@ class _GalleryViewState extends State<GalleryView> {
             padding:
                 const EdgeInsets.symmetric(vertical: 0.0, horizontal: 30.0),
             child: ElevatedButton(
-              child: Text('Take a picture'),
               onPressed: () => _getImage(ImageSource.camera),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.cyan),
                 // foregroundColor: MaterialStateProperty.all<Color>(
                 //     Theme.of(context).primaryColor),
+              ),
+              child: Text(
+                'Take a picture',
+                style: TextStyle(color: Theme.of(context).primaryColor),
               ),
             ),
           ),
