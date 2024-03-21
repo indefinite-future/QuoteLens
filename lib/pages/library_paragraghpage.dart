@@ -68,9 +68,6 @@ class _BookParagraphPageState extends State<BookParagraphPage> {
       throw Exception('Must be logged in to get quotes');
     }
 
-    // print('User ID: ${user.uid}'); // print user id
-    // print('Book ID: $bookId'); // print book id
-
     final quotesRef = FirebaseFirestore.instance
         .collection('users')
         .doc(user.uid)
@@ -85,6 +82,27 @@ class _BookParagraphPageState extends State<BookParagraphPage> {
     });
 
     return quotesRef;
+  }
+
+  void deleteQuoteFromFirebase(String bookId, String quoteId) {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw Exception('Must be logged in to delete quotes');
+    }
+
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .collection('books')
+        .doc(bookId)
+        .collection('quotes')
+        .doc(quoteId)
+        .delete()
+        .then((_) {
+      print("Quote successfully deleted!");
+    }).catchError((error) {
+      print("Failed to delete quote: $error");
+    });
   }
 
   @override
@@ -152,6 +170,48 @@ class _BookParagraphPageState extends State<BookParagraphPage> {
                                       quoteText: quote, // pass the quote text
                                     ),
                                   ),
+                                );
+                              },
+                              onLongPress: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog.adaptive(
+                                      title: const Text('Delete quote?'),
+                                      content: Text(
+                                          'Are you sure you want to delete this quote?',
+                                          style: TextStyle(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                          )),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text(
+                                            'Cancel',
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                            ),
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            deleteQuoteFromFirebase(
+                                                snapshot.data!, quoteId);
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text('Delete',
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                              )),
+                                        ),
+                                      ],
+                                    );
+                                  },
                                 );
                               },
                               child: ListTile(

@@ -22,6 +22,7 @@ class _AddBooksPageState extends State<AddBooksPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add New Books'),
+        backgroundColor: Theme.of(context).colorScheme.background,
       ),
       backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
