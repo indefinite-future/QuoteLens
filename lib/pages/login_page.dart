@@ -60,15 +60,50 @@ class _LoginPageState extends State<LoginPage> {
 
     if (e.code == 'network-request-failed') {
       await networkProblem();
-    } else if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
+    } else if (e.code == 'INVALID_LOGIN_CREDENTIALS' ||
+        e.code == 'invalid-credential') {
       await wrongInputMessage();
     } else if (e.code == 'too-many-requests') {
       await toomanyrequest();
+    } else {
+      await wentWrong();
     }
 
     // for debugging purposes
     print('Firebase Authentication Exception: ${e.message} \n');
     print('Firebase Authentication Exception Code: ${e.code} \n \n');
+  }
+
+  Future<void> wentWrong() async {
+    print('network problem');
+    await showAdaptiveDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog.adaptive(
+        backgroundColor: const Color.fromRGBO(142, 142, 147, 1),
+        title: const Text(
+          'Something went wrong',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        content: const Text(
+          'Please wait and try again.',
+          style: TextStyle(
+            fontSize: 14,
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text(
+              'OK',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> networkProblem() async {

@@ -1,16 +1,19 @@
+import 'package:feather_icons/feather_icons.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:feather_icons/feather_icons.dart';
 
-class AddBooksPage extends StatefulWidget {
-  const AddBooksPage({super.key});
+class EditBookPage extends StatefulWidget {
+  final String bookId;
+
+  const EditBookPage({Key? key, required this.bookId}) : super(key: key);
 
   @override
-  State<AddBooksPage> createState() => _AddBooksPageState();
+  _EditBookPageState createState() => _EditBookPageState();
 }
 
-class _AddBooksPageState extends State<AddBooksPage> {
+class _EditBookPageState extends State<EditBookPage> {
   final _formKey = GlobalKey<FormState>();
   final _bookNameController = TextEditingController();
   final _authorController = TextEditingController();
@@ -37,6 +40,25 @@ class _AddBooksPageState extends State<AddBooksPage> {
     _yearFocusNode.addListener(() {
       setState(() {});
     });
+    fetchBookDetails();
+  }
+
+  fetchBookDetails() async {
+    final user = FirebaseAuth.instance.currentUser;
+    final bookRef = FirebaseFirestore.instance
+        .collection('users')
+        .doc(user!.uid)
+        .collection('books')
+        .doc(widget.bookId);
+
+    final bookSnapshot = await bookRef.get();
+
+    setState(() {
+      _bookNameController.text = bookSnapshot['bookName'];
+      _authorController.text = bookSnapshot['author'];
+      _publisherController.text = bookSnapshot['publisher'];
+      _yearController.text = bookSnapshot['year'].toString();
+    });
   }
 
   @override
@@ -52,10 +74,9 @@ class _AddBooksPageState extends State<AddBooksPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add New Books'),
+        title: const Text('Edit Book'),
         backgroundColor: Theme.of(context).colorScheme.background,
       ),
-      backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Form(
@@ -75,21 +96,11 @@ class _AddBooksPageState extends State<AddBooksPage> {
                     focusNode: _bookNameFocusNode,
                     controller: _bookNameController,
                     decoration: InputDecoration(
-                      label: Row(
-                        children: [
-                          Text(
-                            "Book Title",
-                            style: TextStyle(
-                              color: _bookNameFocusNode.hasFocus
-                                  ? Colors.cyan
-                                  : Theme.of(context).primaryColor,
-                            ),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.all(3.0),
-                          ),
-                          const Text('*', style: TextStyle(color: Colors.red)),
-                        ],
+                      labelText: 'Book Title',
+                      labelStyle: TextStyle(
+                        color: _bookNameFocusNode.hasFocus
+                            ? Colors.cyan
+                            : Theme.of(context).primaryColor,
                       ),
                     ),
                     validator: (value) {
@@ -103,21 +114,11 @@ class _AddBooksPageState extends State<AddBooksPage> {
                     focusNode: _authorFocusNode,
                     controller: _authorController,
                     decoration: InputDecoration(
-                      label: Row(
-                        children: [
-                          Text(
-                            "Author",
-                            style: TextStyle(
-                              color: _authorFocusNode.hasFocus
-                                  ? Colors.cyan
-                                  : Theme.of(context).primaryColor,
-                            ),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.all(3.0),
-                          ),
-                          const Text('*', style: TextStyle(color: Colors.red)),
-                        ],
+                      labelText: 'Author',
+                      labelStyle: TextStyle(
+                        color: _authorFocusNode.hasFocus
+                            ? Colors.cyan
+                            : Theme.of(context).primaryColor,
                       ),
                     ),
                     validator: (value) {
@@ -165,13 +166,12 @@ class _AddBooksPageState extends State<AddBooksPage> {
                       ),
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          // If the form is valid, add the book to Firestore
                           final user = FirebaseAuth.instance.currentUser;
                           final bookRef = FirebaseFirestore.instance
                               .collection('users')
                               .doc(user!.uid)
                               .collection('books')
-                              .doc();
+                              .doc(widget.bookId);
 
                           int? year;
                           if (_yearController.text.isNotEmpty &&
@@ -179,26 +179,18 @@ class _AddBooksPageState extends State<AddBooksPage> {
                             year = int.parse(_yearController.text);
                           }
 
-                          await bookRef.set({
-                            'bookId': bookRef.id,
+                          await bookRef.update({
                             'bookName': _bookNameController.text,
                             'author': _authorController.text,
                             'publisher': _publisherController.text,
                             'year': year,
-                            'last_click': Timestamp.now(),
                           });
 
-                          await FirebaseFirestore.instance
-                              .collection('users')
-                              .doc(user.uid)
-                              .update(
-                            {'latestClickedBook': bookRef.id},
-                          );
                           Navigator.pop(context);
                         }
                       },
                       child: Text(
-                        'Submit',
+                        'Save',
                         style: TextStyle(
                           color: Theme.of(context).primaryColor,
                           fontSize: 18,

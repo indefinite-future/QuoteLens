@@ -4,7 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:QuoteLens/pages/library_add_book_page.dart';
-import 'package:firebase_core/firebase_core.dart';
+
+import 'library_edit_book_page.dart';
 
 class LibraryPage extends StatefulWidget {
   LibraryPage({super.key});
@@ -101,71 +102,122 @@ class _LibraryPageState extends State<LibraryPage> {
                                   .doc(latestBook.id)
                                   .update({'last_click': Timestamp.now()});
                             },
-                            onLongPress: () => showDialog<String>(
+                            onLongPress: () => showDialog(
                               context: context,
-                              builder: (BuildContext context) =>
-                                  AlertDialog.adaptive(
-                                backgroundColor:
-                                    const Color.fromRGBO(142, 142, 147, 1),
-                                title: const Text('Delete Book'),
-                                content: const Text(
-                                  'Are you sure you want to delete this book?',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.pop(context, 'Cancel'),
-                                    child: const Text('Cancel',
-                                        style: TextStyle(color: Colors.cyan)),
-                                  ),
-                                  TextButton(
-                                    onPressed: () async {
-                                      // Delete the book from the database
-                                      await FirebaseFirestore.instance
-                                          .collection('users')
-                                          .doc(user!.uid)
-                                          .collection('books')
-                                          .doc(latestBook.id)
-                                          .delete();
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  //title: Text('Choose an action'),
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.background,
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      ListTile(
+                                        leading: Icon(Icons.edit,
+                                            color: Colors.cyan),
+                                        title: Text('Edit'),
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EditBookPage(
+                                                      bookId: latestBook.id),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                      ListTile(
+                                        leading: Icon(Icons.delete,
+                                            color: Colors.red),
+                                        title: Text('Delete'),
+                                        onTap: () async {
+                                          // Delete the book from the database
+                                          await FirebaseFirestore.instance
+                                              .collection('users')
+                                              .doc(user!.uid)
+                                              .collection('books')
+                                              .doc(latestBook.id)
+                                              .delete();
 
-                                      // try {
-                                      //   // Delete the book from the storage
-                                      //   await widget.storageRef
-                                      //       .child(user.uid)
-                                      //       .child(latestBook.id)
-                                      //       .delete();
-                                      // } catch (e) {
-                                      //   if (e is FirebaseException &&
-                                      //       e.code == 'object-not-found') {
-                                      //     print(
-                                      //         'The book was not found in the storage.');
-                                      //   } else {
-                                      //     rethrow;
-                                      //   }
-                                      // }
+                                          // Update the latest clicked book
+                                          var books =
+                                              snapshot.data!.docs.toList();
+                                          books.sort((a, b) => b['last_click']
+                                              .compareTo(a['last_click']));
+                                          await FirebaseFirestore.instance
+                                              .collection('users')
+                                              .doc(user.uid)
+                                              .update({
+                                            'latestClickedBook': latestBook.id
+                                          });
 
-                                      // Update the latest clicked book
-                                      var books = snapshot.data!.docs.toList();
-                                      books.sort((a, b) => b['last_click']
-                                          .compareTo(a['last_click']));
-                                      await FirebaseFirestore.instance
-                                          .collection('users')
-                                          .doc(user.uid)
-                                          .update({
-                                        'latestClickedBook': latestBook.id
-                                      });
-
-                                      Navigator.pop(context, 'OK');
-                                    },
-                                    child: const Text('OK',
-                                        style: TextStyle(color: Colors.red)),
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                      ListTile(
+                                        leading: Icon(Icons.cancel,
+                                            color: Colors.grey),
+                                        title: Text('Cancel'),
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                );
+                              },
                             ),
+                            // onLongPress: () => showDialog<String>(
+                            //   context: context,
+                            //   builder: (BuildContext context) =>
+                            //       AlertDialog.adaptive(
+                            //     backgroundColor:
+                            //         const Color.fromRGBO(142, 142, 147, 1),
+                            //     title: const Text('Delete Book'),
+                            //     content: const Text(
+                            //       'Are you sure you want to delete this book?',
+                            //       style: TextStyle(
+                            //         fontSize: 14,
+                            //       ),
+                            //     ),
+                            //     actions: <Widget>[
+                            //       TextButton(
+                            //         onPressed: () =>
+                            //             Navigator.pop(context, 'Cancel'),
+                            //         child: const Text('Cancel',
+                            //             style: TextStyle(color: Colors.cyan)),
+                            //       ),
+                            //       TextButton(
+                            //         onPressed: () async {
+                            //           // Delete the book from the database
+                            //           await FirebaseFirestore.instance
+                            //               .collection('users')
+                            //               .doc(user!.uid)
+                            //               .collection('books')
+                            //               .doc(latestBook.id)
+                            //               .delete();
+
+                            //           // Update the latest clicked book
+                            //           var books = snapshot.data!.docs.toList();
+                            //           books.sort((a, b) => b['last_click']
+                            //               .compareTo(a['last_click']));
+                            //           await FirebaseFirestore.instance
+                            //               .collection('users')
+                            //               .doc(user.uid)
+                            //               .update({
+                            //             'latestClickedBook': latestBook.id
+                            //           });
+
+                            //           Navigator.pop(context, 'OK');
+                            //         },
+                            //         child: const Text('OK',
+                            //             style: TextStyle(color: Colors.red)),
+                            //       ),
+                            //     ],
+                            //   ),
+                            //),
                             child: Container(
                               width: 400,
                               height: 160,
@@ -281,70 +333,91 @@ class _LibraryPageState extends State<LibraryPage> {
                                   onLongPress: () => showDialog<String>(
                                     context: context,
                                     builder: (BuildContext context) =>
-                                        AlertDialog.adaptive(
-                                      backgroundColor: const Color.fromRGBO(
-                                          142, 142, 147, 1),
-                                      title: const Text('Delete Book'),
-                                      content: const Text(
-                                        'Are you sure you want to delete this book?',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                        ),
+                                        AlertDialog(
+                                      //title: const Text('Choose an action'),
+
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          ListTile(
+                                            leading: Icon(Icons.edit,
+                                                color: Colors.cyan),
+                                            title: Text('Edit'),
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      EditBookPage(
+                                                          bookId: book.id),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                          ListTile(
+                                            leading: Icon(Icons.delete,
+                                                color: Colors.red),
+                                            title: Text('Delete'),
+                                            onTap: () => showDialog<String>(
+                                              context: context,
+                                              builder: (BuildContext context) =>
+                                                  AlertDialog.adaptive(
+                                                backgroundColor:
+                                                    Theme.of(context)
+                                                        .colorScheme
+                                                        .background,
+                                                title:
+                                                    const Text('Delete Book'),
+                                                content: const Text(
+                                                  'Are you sure you want to delete this book?',
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                actions: <Widget>[
+                                                  TextButton(
+                                                    onPressed: () =>
+                                                        Navigator.pop(
+                                                            context, 'Cancel'),
+                                                    child: const Text('Cancel',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.cyan)),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () async {
+                                                      // Delete the book from the database
+                                                      await FirebaseFirestore
+                                                          .instance
+                                                          .collection('users')
+                                                          .doc(user!.uid)
+                                                          .collection('books')
+                                                          .doc(book.id)
+                                                          .delete();
+
+                                                      Navigator.pop(
+                                                          context, 'OK');
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: const Text('OK',
+                                                        style: TextStyle(
+                                                            color: Colors.red)),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          ListTile(
+                                            leading: Icon(Icons.cancel,
+                                                color: Colors.grey),
+                                            title: Text('Cancel'),
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                        ],
                                       ),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.pop(context, 'Cancel'),
-                                          child: const Text('Cancel',
-                                              style: TextStyle(
-                                                  color: Colors.cyan)),
-                                        ),
-                                        TextButton(
-                                          onPressed: () async {
-                                            // Delete the book from the database
-                                            await FirebaseFirestore.instance
-                                                .collection('users')
-                                                .doc(user!.uid)
-                                                .collection('books')
-                                                .doc(book.id)
-                                                .delete();
-
-                                            // try {
-                                            //   // Delete the book from the storage
-                                            //   await widget.storageRef
-                                            //       .child(user.uid)
-                                            //       .child(book.id)
-                                            //       .delete();
-                                            // } catch (e) {
-                                            //   if (e is FirebaseException &&
-                                            //       e.code ==
-                                            //           'object-not-found') {
-                                            //     print(
-                                            //         'The book was not found in the storage.');
-                                            //   } else {
-                                            //     rethrow;
-                                            //   }
-                                            // }
-
-                                            // Update the latest clicked book
-                                            // var books =
-                                            //     snapshot.data!.docs.toList();
-                                            // books.sort((a, b) => b['last_click']
-                                            //     .compareTo(a['last_click']));
-                                            // await FirebaseFirestore.instance
-                                            //     .collection('users')
-                                            //     .doc(user.uid)
-                                            //     .update({
-                                            //   'latestClickedBook': latestBook.id
-                                            // });
-
-                                            Navigator.pop(context, 'OK');
-                                          },
-                                          child: const Text('OK',
-                                              style:
-                                                  TextStyle(color: Colors.red)),
-                                        ),
-                                      ],
                                     ),
                                   ),
                                 ),

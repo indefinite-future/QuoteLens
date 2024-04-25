@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter/services.dart';
+import 'package:appinio_social_share/appinio_social_share.dart';
 
 class QuillEditorPage extends StatefulWidget {
   final String bookName;
@@ -19,6 +21,8 @@ class _QuillEditorPageState extends State<QuillEditorPage> {
   late QuillController _controller = QuillController.basic();
   late bool _readOnly = false;
   late bool _multiRowsDisplay = true;
+
+  AppinioSocialShare appinioSocialShare = AppinioSocialShare();
 
   Future<void> createQuote(String quote) async {
     final user = FirebaseAuth.instance.currentUser;
@@ -89,6 +93,16 @@ class _QuillEditorPageState extends State<QuillEditorPage> {
         title: const Text('Quote Editor'),
         backgroundColor: Theme.of(context).colorScheme.background,
         actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.copy),
+            onPressed: () {
+              Clipboard.setData(
+                  ClipboardData(text: _controller.document.toPlainText()));
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Quote copied to clipboard')),
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.save),
             onPressed: () {

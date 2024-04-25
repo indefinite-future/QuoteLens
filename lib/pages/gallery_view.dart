@@ -4,7 +4,6 @@ import 'package:QuoteLens/components/language_list.dart';
 import 'package:QuoteLens/pages/library_manual_input.dart';
 import 'package:QuoteLens/provider/language_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_mlkit_commons/google_mlkit_commons.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';

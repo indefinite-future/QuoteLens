@@ -18,12 +18,9 @@ class LanguageList extends StatefulWidget {
 }
 
 class _LanguageListState extends State<LanguageList> {
-  late TextRecognitionScript _script;
-
   @override
   void initState() {
     super.initState();
-    _script = widget.initialScript;
   }
 
   String getDisplayName(TextRecognitionScript script) {

@@ -1,4 +1,3 @@
-import 'package:QuoteLens/pages/library_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -114,15 +113,50 @@ class _RegisterPageState extends State<RegisterPage> {
         weakPassword();
       } else if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
         wrongInputMessage();
+      } else {
+        wentWrong();
       }
       // for debugging purposes
       print('\n Firebase Authentication Exception: ${e.message} \n');
       print('Firebase Authentication Exception Code: ${e.code}');
     } catch (e) {
       print('Exception: ${e.toString()}');
-    } finally {
-      Navigator.pop(context);
     }
+    // finally {
+    //   Navigator.pop(context);
+    // }
+  }
+
+  Future<void> wentWrong() async {
+    print('network problem');
+    await showAdaptiveDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog.adaptive(
+        backgroundColor: const Color.fromRGBO(142, 142, 147, 1),
+        title: const Text(
+          'Something went wrong',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        content: const Text(
+          'Please wait and try again.',
+          style: TextStyle(
+            fontSize: 14,
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text(
+              'OK',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   void emailAlreadyInUse() {
